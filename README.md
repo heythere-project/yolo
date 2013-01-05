@@ -19,4 +19,6 @@ clone this repo, cd into the folder, type `npm install`
 
 ##run
 starting up redis:
-<repo>/redis/redis start
+`<repo>redis/redis start`
+node
+`<repo>./appserver`
