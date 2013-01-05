@@ -1,0 +1,16 @@
+{
+  "name": "appserver",
+  "version": "0.0.1",
+  "author": "Sebastian <sotto@heythe.re>",
+  "description": "Heythere Appserver",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodejitsu/http-server.git"
+  },
+  "dependencies" : {
+    "underscore":"*"
+  },
+  "engines": {
+    "node": ">=0.8"
+  }
+}
