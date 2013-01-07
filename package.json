@@ -8,7 +8,15 @@
     "url": "https://github.com/zentur/heythere_appserver.git"
   },
   "dependencies" : {
-    "underscore":"*"
+    "underscore":"*",
+    "hiredis" : "*",
+    "redis" : "*",
+    "geddy" : "*",
+    "express" : "*",
+    "mysql" : "2.0.0-alpha5",
+    "connect" : "*",
+    "passport" : "*",
+    "hat" : "*"
   },
   "engines": {
     "node": ">=0.8"
