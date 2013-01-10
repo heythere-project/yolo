@@ -16,7 +16,8 @@
     "mysql" : "2.0.0-alpha5",
     "connect" : "*",
     "passport" : "*",
-    "hat" : "*"
+    "hat" : "*",
+    "optimist" : "*"
   },
   "engines": {
     "node": ">=0.8"

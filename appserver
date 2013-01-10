@@ -1,2 +1,50 @@
 #!/usr/bin/env node
-console.log("wuhu")
+var flags = require('optimist').argv,
+	Logger = require('./lib/logger.js'),
+	startup = require('./src/startup');
+
+//global constants
+PATH = process.env.PWD;
+CONFIG = PATH + '/config/';
+APP = PATH + '/app/';
+
+//the global Yolo
+Yolo = {
+	environment : flags.e || 'development',
+	models : {},
+	controllers : {},
+	routes : {},
+};
+
+//start logger
+Yolo.logger = new Logger();
+
+Yolo.logger.info('You only live once - Welcome');
+Yolo.logger.log('Startup ' + Yolo.environment + ' …')
+
+//perform all checks
+startup.performChecks();
+
+//if all files are present we are good to go
+Yolo.config = require(CONFIG + Yolo.environment);
+
+//load models & controllers
+Yolo.models = startup.loadModels();
+Yolo.controllers = startup.loadControllers();
+
+//load routes & check them
+Yolo.routes = startup.loadRoutes();
+
+
+
+
+
+//etablish db connection
+
+
+
+
+//start http
+//bind routes
+//start socket
+//ready to go
