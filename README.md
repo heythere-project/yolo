@@ -23,4 +23,4 @@ starting up redis:
 
 node:
 
-`$ <repo>./appserver`
+`$ <repo>./appserver -e development`
