@@ -15,7 +15,7 @@ module.exports = {
 
 		for( var check in checks ){
 			if(!fs.existsSync(checks[check])){
-				Yolo.logger.error("No " + check);
+				Yolo.logger.error("No " +check+ " searched for: " +checks[check] );
 				throw new Error("No " + check);
 			}
 		}
@@ -54,7 +54,7 @@ module.exports = {
 
 		// we check each routes if its matches to a controller and a function
 		for( var route in routes ){
-			var fn = routes[route];
+			var fn = routes[route].to;
 				fn = fn.split('.');
 
 			if( fn[0] in Yolo.controllers ){
@@ -63,11 +63,11 @@ module.exports = {
 				if(instance[fn[1]] && instance[fn[1]].call ){
 					l[route] = routes[route];
 				} else {
-					Yolo.logger.error("Route '%s' is not matching any function with: %s", route, routes[route]);
+					Yolo.logger.error("Route '"+ route + "' is not matching any function with:"  + routes[route].to);
 				}
 
 			} else {
-				Yolo.logger.error("Route '%s' is not matching any controller with: %s", route, routes[route]);
+				Yolo.logger.error("Route '" + route + "' is not matching any controller with:" + routes[route].to);
 			}
 		}
 

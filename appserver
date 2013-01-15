@@ -4,9 +4,12 @@ var flags = require('optimist').argv,
 	startup = require('./src/startup');
 
 //global constants
-PATH = process.env.PWD;
+PATH = require('./src/savePath');
+
+console.log(PATH)
 CONFIG = PATH + '/config/';
 APP = PATH + '/app/';
+PUBLIC = PATH + '/public/';
 
 //the global Yolo
 Yolo = {
@@ -20,7 +23,7 @@ Yolo = {
 Yolo.logger = new Logger();
 
 Yolo.logger.info('You only live once - Welcome');
-Yolo.logger.log('Startup ' + Yolo.environment + ' …')
+Yolo.logger.log('Booting ' + Yolo.environment + ' …')
 
 //perform all checks
 startup.performChecks();
@@ -45,6 +48,9 @@ Yolo.routes = startup.loadRoutes();
 
 
 //start http
+Yolo.httpServer = require('./src/http')();
+
 //bind routes
+Yolo.httpServer.bind(Yolo.routes);
 //start socket
 //ready to go
