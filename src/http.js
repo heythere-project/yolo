@@ -65,8 +65,16 @@ Http.prototype.bind = function(routes){
 	var server = this.server;
 
 	for(var path in routes){
-		var route = _.extend({}, routeDefaults, routes[path]);
-		server[route.via]('/v1/' + path, validateConstraints(route), callRoute(route) );
+		if(_.isArray(routes[path])){
+			routes[path].forEach(function(_route){
+				var route = _.extend({}, routeDefaults, _route);
+				server[route.via]('/v1/' + path, validateConstraints(route), callRoute(route) );
+			});
+		} else {
+			var route = _.extend({}, routeDefaults, routes[path]);
+			server[route.via]('/v1/' + path, validateConstraints(route), callRoute(route) );
+		}
+		
 	}
 
 	this.routeMismatch();

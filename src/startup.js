@@ -1,4 +1,5 @@
 var fs = require('fs'),
+	_ = require('underscore'),
 	formatName = function(str){
 		return str.charAt(0).toUpperCase() + str.slice(1).replace('.js', '');
 	};
@@ -53,23 +54,41 @@ module.exports = {
 			l = {};
 
 		// we check each routes if its matches to a controller and a function
-		for( var route in routes ){
-			var fn = routes[route].to;
-				fn = fn.split('.');
+		for( var path in routes ){
+
+			// we check if its an array of routes match to a path
+			// in other words if its a resourceful routig
+			if( _.isArray( routes[path] ) ){
+				
+				l[path] = [];
+
+				//iterate over the routes array and check each
+				routes[path].forEach(function(route){
+					if( isValid(route.to) ){
+						l[path].push(route);
+					} else {
+						Yolo.logger.error("Route '"+ path +"' via '" + route.via + "' is not matching any function with: "  + route.to);
+					}
+				});
+
+			} else {
+				if( isValid(routes[path].to) ){
+					l[path] = routes[path]
+				} else {
+					Yolo.logger.error("Route '"+ path +"' is not matching any function with: "  + route.to);
+				}
+			}
+		}
+
+		function isValid(fn){
+			fn = fn.split('.');
 
 			if( fn[0] in Yolo.controllers ){
 				var instance = new Yolo.controllers[ fn[0] ];
-
-				if(instance[fn[1]] && instance[fn[1]].call ){
-					l[route] = routes[route];
-				} else {
-					Yolo.logger.error("Route '"+ route + "' is not matching any function with:"  + routes[route].to);
-				}
-
-			} else {
-				Yolo.logger.error("Route '" + route + "' is not matching any controller with:" + routes[route].to);
-			}
-		}
+				return instance[fn[1]] && instance[fn[1]].call 
+			} 
+			return false;
+		};
 
 		return l;
 	},
