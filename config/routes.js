@@ -30,7 +30,7 @@ module.exports = {
 	
 	'token' : [{
 			to : 'Users.getToken',
-			via : 'post',
+			via : 'get',
 			authorized : false
 		},{
 			to : 'Users.destroyToken',

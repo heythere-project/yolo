@@ -26,9 +26,16 @@ function callRoute(route){
 	var fn = route.to.split('.'),
 		controller = Yolo.controllers[fn[0]];
 
+	_.extend(controller.prototype, Yolo.Controller.prototype)
+	
 	return function(req, res){
 		var n = new controller();
-		n[fn[1]].call(n, req, res);
+		var params = _.extend({}, req.params, req.query)
+		
+		n.request = req;
+		n.response = res;
+
+		n[fn[1]](params);
 	};
 };
 
@@ -68,11 +75,11 @@ Http.prototype.bind = function(routes){
 		if(_.isArray(routes[path])){
 			routes[path].forEach(function(_route){
 				var route = _.extend({}, routeDefaults, _route);
-				server[route.via]('/v1/' + path, validateConstraints(route), callRoute(route) );
+				server[route.via]('/v1/' + path + '.:format?', validateConstraints(route), callRoute(route) );
 			});
 		} else {
 			var route = _.extend({}, routeDefaults, routes[path]);
-			server[route.via]('/v1/' + path, validateConstraints(route), callRoute(route) );
+			server[route.via]('/v1/' + path + '.:format?', validateConstraints(route), callRoute(route) );
 		}
 		
 	}

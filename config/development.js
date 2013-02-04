@@ -1,5 +1,10 @@
 module.exports = {
 	http : {
-		port : 80
+		port : 80,
+		respondWith : 'json'
+	},
+
+	database : {
+		name : 'heythere'
 	}
 }
