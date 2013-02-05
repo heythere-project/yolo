@@ -1,7 +1,8 @@
 module.exports = {
 	http : {
-		port : 80,
-		respondWith : 'json'
+		port : 8080,
+		respondWith : 'json',
+		statics : 'app/public/'
 	},
 
 	database : {

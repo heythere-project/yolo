@@ -42,8 +42,12 @@ function callRoute(route){
 var Http = function(){
 	this.server = express();
 
-	this.server.use(express.favicon());
-	this.server.use(express.static(PUBLIC));
+	//this.server.use(express.favicon());
+
+	if(Yolo.config.http.statics){
+		this.server.use(express.static(PATH + Yolo.config.http.statics));
+	}
+
 	this.server.use(express.bodyParser());
 
 
