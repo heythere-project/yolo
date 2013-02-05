@@ -1,6 +1,6 @@
 var flags = require('optimist').argv,
-	Logger = require('./logger'),
-	startup = require('./startup'),
+	Logger = require('./src/logger'),
+	startup = require('./src/startup'),
 	redis = require("redis");
 
 //make underscore global
@@ -34,8 +34,8 @@ YoloApp.prototype.run = function(options) {
 	this.config = require(CONFIG + Yolo.environment);
 
 	//load base classes
-	this.Model = require('./model');
-	this.Controller = require('./controller')
+	this.Model = require('./src/model');
+	this.Controller = require('./src/controller')
 
 	//load models & controllers
 	this.models = startup.loadModels();
@@ -45,7 +45,7 @@ YoloApp.prototype.run = function(options) {
 	this.routes = startup.loadRoutes();
 
 	//etablish db connection
-	this.db = require('./db');
+	this.db = require('./src/db');
 
 	//start redis 
 	/*this.redis = redis.createClient();
@@ -54,7 +54,7 @@ YoloApp.prototype.run = function(options) {
 	});*/
 
 	//start http
-	this.httpServer = require('./http')();
+	this.httpServer = require('./src/http')();
 
 	//bind routes
 	this.httpServer.bind(this.routes);
