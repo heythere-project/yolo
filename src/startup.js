@@ -75,7 +75,7 @@ module.exports = {
 				if( isValid(routes[path].to) ){
 					l[path] = routes[path]
 				} else {
-					Yolo.logger.error("Route '"+ path +"' is not matching any function with: "  + route.to);
+					Yolo.logger.error("Route '"+ path +"' is not matching any function with: "  + routes[path].to);
 				}
 			}
 		}

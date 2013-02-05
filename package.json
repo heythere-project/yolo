@@ -15,9 +15,11 @@
     "express" : "*",
     "mysql" : "2.0.0-alpha5",
     "connect" : "*",
-    "passport" : "*",
     "hat" : "*",
-    "optimist" : "*"
+    "optimist" : "*",
+    "backbone" : "*",
+    "backbone-validation" : "*",
+    "bcrypt" : "*"
   },
   "engines": {
     "node": ">=0.8"

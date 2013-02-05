@@ -13,14 +13,16 @@ function BaseController(){
 _.extend( BaseController.prototype, {
 	renderHTML : function(template, params){
 		var format = this.request.params.format;
-		if( format && format === 'html' || Yolo.config.http.respondWith === 'html' ){
-			this.response.end( params );
+		if( format && format === 'html' || (Yolo.config.http.respondWith === 'html' && !this.response.responded) ){
+			this.response.responded = true;
+			this.response.send( params );
 		}
 	},
 
 	renderJSON : function(params){
 		var format = this.request.params.format;
-		if( format && format === 'json' || Yolo.config.http.respondWith === 'json' ){
+		if( format && format === 'json' || (Yolo.config.http.respondWith === 'json' && !this.response.responded)){
+			this.response.responded = true;
 			this.response.json( params );
 		}
 	}

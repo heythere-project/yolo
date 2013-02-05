@@ -27,6 +27,12 @@
 
 
 module.exports = {
+
+	'user/register' : {
+		to : 'Users.register',
+		via : 'get',
+		authorized : false
+	},
 	
 	'token' : [{
 			to : 'Users.getToken',
