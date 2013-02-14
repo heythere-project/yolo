@@ -5,9 +5,7 @@ var _ = require('underscore');
 	is the Base Controller all other Controllers should inherit from
 */
 
-function BaseController(){
-
-}
+function BaseController(){}
 
 /* … and override and extend the methods with ours */
 _.extend( BaseController.prototype, {
@@ -15,7 +13,7 @@ _.extend( BaseController.prototype, {
 		var format = this.request.params.format;
 		if( format && format === 'html' || (Yolo.config.http.respondWith === 'html' && !this.response.responded) ){
 			this.response.responded = true;
-			this.response.send( params );
+			this.response.render(template, params );
 		}
 	},
 

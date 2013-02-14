@@ -1,5 +1,6 @@
 var express = require('express'),
 	connect = require('connect'),
+	engine = require('ejs-locals'),
 	_ = require('underscore');
 
 var routeDefaults = {
@@ -44,18 +45,30 @@ var Http = function(){
 
 	//this.server.use(express.favicon());
 
+	//serve static files
 	if(Yolo.config.http.statics){
 		this.server.use(express.static(PATH + Yolo.config.http.statics));
 	}
 
+	//parse the request body eg post requests
 	this.server.use(express.bodyParser());
 
+	//.html is the default extension
+	this.server.set("view engine", "html");
 
+	// render .html files with ejs
+	this.server.engine('html', engine);
+
+	//set the views directory
+	this.server.set('views', APP + '/views/');
+
+	//setup logger for all request
 	this.server.use(function(req, res, next){
 	  Yolo.logger.log(req.method + ' ' + req.url);
 	  next();
 	});
 
+	//method that authorizeses all request TODO move that outside 
 	this.server.use(function(req, res, next){
 		req.authorized = false;
 
@@ -79,11 +92,11 @@ Http.prototype.bind = function(routes){
 		if(_.isArray(routes[path])){
 			routes[path].forEach(function(_route){
 				var route = _.extend({}, routeDefaults, _route);
-				server[route.via]('/v1/' + path + '.:format?', validateConstraints(route), callRoute(route) );
+				server[route.via]('/' + path + '.:format?', validateConstraints(route), callRoute(route) );
 			});
 		} else {
 			var route = _.extend({}, routeDefaults, routes[path]);
-			server[route.via]('/v1/' + path + '.:format?', validateConstraints(route), callRoute(route) );
+			server[route.via]('/' + path + '.:format?', validateConstraints(route), callRoute(route) );
 		}
 		
 	}

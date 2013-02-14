@@ -7,17 +7,20 @@
     "type": "git",
     "url": "https://github.com/zentur/heythere_appserver.git"
   },
-  "dependencies" : {
-    "underscore":"*",
-    "hiredis" : "*",
-    "redis" : "*",
-    "express" : "*",
-    "connect" : "*",
-    "hat" : "*",
-    "optimist" : "*",
-    "backbone" : "*",
-    "backbone-validation" : "*",
-    "bcrypt" : "*"
+  "dependencies": {
+    "underscore": "*",
+    "hiredis": "*",
+    "redis": "*",
+    "express": "*",
+    "connect": "*",
+    "hat": "*",
+    "optimist": "*",
+    "backbone": "*",
+    "backbone-validation": "*",
+    "bcrypt": "*",
+    "ejs": "*",
+    "consolidate": "*",
+    "ejs-locals": "~1.0.2"
   },
   "engines": {
     "node": ">=0.8"

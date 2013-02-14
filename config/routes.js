@@ -28,11 +28,17 @@
 
 module.exports = {
 
-	'user/register' : {
-		to : 'Users.register',
-		via : 'get',
-		authorized : false
-	},
+	'user/register' : [{
+			to : 'Users.registerForm',
+			via : 'get',
+			authorized : false
+		},
+		{
+			to : 'Users.registerNew',
+			via : 'post',
+			authorized : false
+		}],
+
 	
 	'token' : [{
 			to : 'Users.getToken',

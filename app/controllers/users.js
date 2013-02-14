@@ -2,20 +2,21 @@ var bcrypt = require('bcrypt');
 
 var Users = function(){};
 
-Users.prototype.register = function(params){
+Users.prototype.registerNew = function(params){
 	var user = new Yolo.models.User({
 		firstName : params.firstName,
 		lastName : params.lastName,
 		email : params.email,
 	});
 
+
 	if(params.password){
 		var salt = bcrypt.genSaltSync(10);
-		user.set('password', bcrypt.hashSync("B4c0/\/", salt));
+		user.set('password', bcrypt.hashSync(params.password, salt));
 	}
 
 	if( !user.isValid() ){
-		this.renderHTML({
+		this.renderHTML( 'users/register', {
 			message : 'validation error',
 			errors : user.validationError
 		});
@@ -36,15 +37,19 @@ Users.prototype.register = function(params){
 				message : "saved"
 			});
 		}, this)
-	});
-
-	
+	});	
 };
-Users.prototype.getToken = function(){
 
+
+
+Users.prototype.registerForm = function(){
+	this.renderHTML("users/register.html", {});
+};
+
+
+Users.prototype.getToken = function(){
 };
 Users.prototype.destroyToken = function(){
-
 };
 
 module.exports = Users;

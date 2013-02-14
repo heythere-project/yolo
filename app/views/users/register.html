@@ -1,0 +1,43 @@
+<% layout('../index') -%>
+
+<h3>Registrieren</h3>
+
+<% if (typeof errors != 'undefined'){ %>
+  <div class="alert">
+    <% for( var e in errors){ %>
+      <%= errors[e] %> 
+    <% } %>
+  </div>
+<% } %>
+
+<form class="form-horizontal" method="post" action="#">
+<div class="control-group">
+    <label class="control-label">Vorname</label>
+    <div class="controls">
+      <input type="text" name="firstName" placeholder="Vorname">
+    </div>
+  </div>
+<div class="control-group">
+    <label class="control-label">Nachname</label>
+    <div class="controls">
+      <input type="text" name="lastName" placeholder="Nachname">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputEmail">Email</label>
+    <div class="controls">
+      <input type="text" id="inputEmail" name="email" placeholder="Email">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">Password</label>
+    <div class="controls">
+      <input type="password" id="inputPassword" placeholder="Password" name="password">
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <button type="submit" class="btn">Sign in</button>
+    </div>
+  </div>
+</form>
