@@ -23,6 +23,10 @@ _.extend( BaseController.prototype, {
 			this.response.responded = true;
 			this.response.json( params );
 		}
+	},
+
+	redirect : function(to){
+		this.response.redirect(to);
 	}
 });
 
