@@ -33,6 +33,7 @@ Users.prototype.register = function(params){
 
 	user.save({
 		success : _.bind(function(user){
+			this.request.session.user = user;
 			this.redirect("/")
 		}, this)
 	});	
