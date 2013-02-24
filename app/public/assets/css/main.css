@@ -1,0 +1,11 @@
+.brand img {
+width: 25px;
+margin-right: 10px;
+vertical-align: middle;
+position: relative;
+top: -2px;
+}
+.navbar form{
+	margin:0;
+	display:inline-block;
+}

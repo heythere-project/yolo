@@ -13,14 +13,17 @@
     "redis": "*",
     "express": "*",
     "connect": "*",
-    "hat": "*",
     "optimist": "*",
     "backbone": "*",
     "backbone-validation": "*",
     "bcrypt": "*",
     "ejs": "*",
     "consolidate": "*",
-    "ejs-locals": "~1.0.2"
+    "ejs-locals": "~1.0.2",
+    "express-partials": "0.0.6",
+    "connect-redis": "~1.4.5",
+    "passport": "~0.1.15",
+    "passport-local": "~0.1.6"
   },
   "engines": {
     "node": ">=0.8"

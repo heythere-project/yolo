@@ -33,6 +33,9 @@ YoloApp.prototype.run = function(options) {
 	//if all files are present we are good to go
 	this.config = require(CONFIG + Yolo.environment);
 
+	//etablish db connection
+	this.db = require('./src/db');
+
 	//load base classes
 	this.Model = require('./src/model');
 	this.Controller = require('./src/controller')
@@ -44,14 +47,11 @@ YoloApp.prototype.run = function(options) {
 	//load routes & check them
 	this.routes = startup.loadRoutes();
 
-	//etablish db connection
-	this.db = require('./src/db');
-
 	//start redis 
-	/*this.redis = redis.createClient();
+	this.redis = redis.createClient();
 	this.redis.on("error", function(err){
 		Yolo.logger.warn(err);
-	});*/
+	});
 
 	//start http
 	this.httpServer = require('./src/http')();

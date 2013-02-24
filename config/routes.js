@@ -28,24 +28,39 @@
 
 module.exports = {
 
+	'user/login' : [{
+			to : 'Users.loginForm',
+			via : 'get',
+			authorized : false
+		},
+		{
+			to : 'Users.login',
+			via : 'post',
+			authorized : false
+	}],
+
 	'user/register' : [{
 			to : 'Users.registerForm',
 			via : 'get',
 			authorized : false
 		},
 		{
-			to : 'Users.registerNew',
+			to : 'Users.register',
 			via : 'post',
 			authorized : false
-		}],
+	}],
 
-	
-	'token' : [{
-			to : 'Users.getToken',
-			via : 'get',
-			authorized : false
-		},{
-			to : 'Users.destroyToken',
-			via : 'delete'
-		}]
+	'user/logout' : {
+		to: 'Users.logout',
+		via : 'post'
+	},
+
+	'/' : {
+		to : 'Dashboard.index',
+		via : 'get'
+	},
+
+	'its/:name' : {
+		to : 'Users.profile'
+	}
 };

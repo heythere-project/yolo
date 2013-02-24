@@ -6,7 +6,8 @@ var User = Yolo.Model.extend({
 		lastName : null,
 		email : null,
 		password : null,
-		picture : null
+		picture : null,
+		lastLogin : new Date()
 	},
 
 	validation : {
@@ -14,6 +15,15 @@ var User = Yolo.Model.extend({
 		lastName : { required : true },
 		email : { pattern: 'email' },
 		password : { required: true, minLength : 5}
+	},
+
+	views : {
+		findByUsername : {
+			map : function(doc){
+				emit(doc);
+			},
+			reduce : function(){}
+		},
 	}
 });
 
