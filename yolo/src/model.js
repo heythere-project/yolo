@@ -1,5 +1,4 @@
-var _ = require('underscore'),
-	Backbone = require('backbone'),
+var Backbone = require('backbone'),
 	validation = require('backbone-validation');
 
 
@@ -19,7 +18,7 @@ _.extend( BaseModel.prototype, validation.mixin );
 /* extend the methods with ours */
 _.extend( BaseModel.prototype, { 
 
-	idAttribute : "id",
+	idAttribute : "_id",
 
 	isValid : function(){
 		var errors = this.validate();
@@ -61,7 +60,7 @@ _.extend( BaseModel.prototype, {
     	var hash = model.toJSON(options);
 
     	// set the _type to model_name so we know to which model typ the data belongs
-    	hash["*type"] = model.model_name;    
+    	hash["type"] = model.model_name;    
    
 	    var success = options.success;
 	    options.success = function(resp) { 
@@ -93,7 +92,6 @@ _.extend( BaseModel.prototype, {
 	    }
 
 	}
-
 });
 
 
