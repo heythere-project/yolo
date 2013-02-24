@@ -1,6 +1,6 @@
 module.exports = {
 	http : {
-		port : 8080,
+		port : 8081,
 		respondWith : 'html',
 		statics : 'app/public/'
 	},
