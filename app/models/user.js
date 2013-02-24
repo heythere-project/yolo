@@ -17,14 +17,7 @@ var User = Yolo.Model.extend({
 		password : { required: true, minLength : 5}
 	},
 
-	views : {
-		findByUsername : {
-			map : function(doc){
-				emit(doc);
-			},
-			reduce : function(){}
-		},
-	}
+	views : { }
 });
 
 

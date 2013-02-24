@@ -7,5 +7,7 @@ module.exports = {
 
 	database : {
 		name : 'heythere'
-	}
+	},
+
+	liveReload : 'app/**/*.js'
 }

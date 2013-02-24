@@ -59,6 +59,10 @@ YoloApp.prototype.run = function(options) {
 	//bind routes
 	this.httpServer.bind(this.routes);
 
+	if(this.config.liveReload){
+		this.watcher = require('./src/watcher');
+	}
+
 	//start socket
 	//ready to go
 	this.logger.info("Ready!");

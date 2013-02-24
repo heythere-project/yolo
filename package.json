@@ -22,7 +22,8 @@
     "ejs-locals": "~1.0.2",
     "express-partials": "0.0.6",
     "connect-redis": "~1.4.5",
-    "cradle": "~0.6.4"
+    "cradle": "~0.6.4",
+    "gaze": "~0.3.3"
   },
   "engines": {
     "node": ">=0.8"
