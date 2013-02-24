@@ -1,9 +1,14 @@
-var cradle = require('cradle');
-
-var connection = new(cradle.Connection)('localhost', 5984, {
-  		cache: false,
+var cradle = require('cradle'),
+	options = {
+		cache: false,
   		raw: false
-	}),
+	};
+
+	if(Yolo.config.database.auth){
+		options.auth = Yolo.config.database.auth;
+	}
+
+var connection = new(cradle.Connection)('localhost', 5984, options),
 	db = connection.database(Yolo.config.database.name);
 
 	db.exists(function(err, exists){
@@ -11,6 +16,8 @@ var connection = new(cradle.Connection)('localhost', 5984, {
 			Yolo.logger.error("Couldnt connect to Database");
 			Yolo.logger.log("Stopping Yolo…");
 			process.exit(1);
+		} else if(err){
+			Yolo.logger.error("Database Error: " + err.error + ' ' + err.reason);
 		}
 
 		if(!exists){

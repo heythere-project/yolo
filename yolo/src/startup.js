@@ -83,7 +83,8 @@ module.exports = {
 						if(err){
 							//handle error
 							//TODO what should we do with database errors?
-							return;
+							console.log(err);
+							return cb.call(ctx || this, res);
 						}
 							
 						//we loop over each item in db result and create a class instance with the result values

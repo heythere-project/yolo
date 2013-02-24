@@ -61,6 +61,14 @@ Users.prototype.login = function(params){
 		var user = users[0],
 			self = this;
 
+		if(!user){
+			return self.renderHTML("users/login", {
+				error : {
+					message : "Wrong email or password"
+				}
+			});
+		}
+
 		bcrypt.compare(params.password, user.get('password'), function(err, same) {
 			if( same ){
 				user.set('lastLogin', new Date() );

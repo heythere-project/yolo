@@ -6,7 +6,11 @@ module.exports = {
 	},
 
 	database : {
-		name : 'heythere'
+		name : 'heythere',
+		/*auth : {
+			username : 'admin',
+			password : 'zupfkuchen'
+		}*/
 	},
 
 	liveReload : 'app/**/*.js'

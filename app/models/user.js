@@ -17,7 +17,7 @@ var User = Yolo.Model.extend({
 		password : { required: true, minLength : 5}
 	},
 
-	views : { }
+	views : {}
 });
 
 
