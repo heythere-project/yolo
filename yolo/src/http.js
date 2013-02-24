@@ -1,6 +1,7 @@
 var express = require('express'),
 	connect = require('connect'),
 	engine = require('ejs-locals'),
+	RedisStore = require('connect-redis')(express),
 	_ = require('underscore');
 
 var routeDefaults = {
@@ -16,8 +17,8 @@ function error(status, msg) {
 
 function validateConstraints(route){
 	return function(req, res, next){
-		if(route.authorized && !req.authorized){
-			return res.redirect('/v1/getToken');
+		if(route.authorized && !req.session.user){
+			return res.redirect('/user/login');
 		} 
 		next();
 	}
@@ -31,10 +32,11 @@ function callRoute(route){
 	
 	return function(req, res){
 		var n = new controller();
-		var params = _.extend({}, req.params, req.query)
+		var params = _.extend({}, req.params, req.query, req.body, { files : req.files });
 		
 		n.request = req;
 		n.response = res;
+		n.currentUser = req.session.user;
 
 		n[fn[1]](params);
 	};
@@ -53,6 +55,12 @@ var Http = function(){
 	//parse the request body eg post requests
 	this.server.use(express.bodyParser());
 
+	//parse cockies
+	this.server.use(express.cookieParser()); 
+
+	//use redis session store
+	this.server.use(connect.session({ store: new RedisStore({}), secret: 'zupfkuchen' }));
+
 	//.html is the default extension
 	this.server.set("view engine", "html");
 
@@ -68,18 +76,6 @@ var Http = function(){
 	  next();
 	});
 
-	//method that authorizeses all request TODO move that outside 
-	this.server.use(function(req, res, next){
-		req.authorized = false;
-
-		if(req.query["token"]){
-			//do db lookup
-			req.authorized = true;
-			next();
-		} else {
-			next();
-		}
-	});
 
 	this.server.listen(Yolo.config.http.port);
 	Yolo.logger.log("HttpServer listening :" + Yolo.config.http.port);
@@ -92,11 +88,17 @@ Http.prototype.bind = function(routes){
 		if(_.isArray(routes[path])){
 			routes[path].forEach(function(_route){
 				var route = _.extend({}, routeDefaults, _route);
-				server[route.via]('/' + path + '.:format?', validateConstraints(route), callRoute(route) );
+				server[route.via]('/' + path + '.:format?', 
+					validateConstraints(route), 
+					callRoute(route)
+				);
 			});
 		} else {
 			var route = _.extend({}, routeDefaults, routes[path]);
-			server[route.via]('/' + path + '.:format?', validateConstraints(route), callRoute(route) );
+			server[route.via]('/' + path + '.:format?',
+				validateConstraints(route), 
+				callRoute(route)
+			);
 		}
 		
 	}
