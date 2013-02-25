@@ -1,1 +1,1 @@
-module.exports = function Post(){};
+module.exports = Yolo.Model.extend({});

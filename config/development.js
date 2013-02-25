@@ -2,7 +2,8 @@ module.exports = {
 	http : {
 		port : 8081,
 		respondWith : 'html',
-		statics : 'app/public/'
+		statics : 'app/public/',
+		notAuthorizedRedirect : '/user/login'
 	},
 
 	database : {
@@ -13,5 +14,11 @@ module.exports = {
 		}*/
 	},
 
-	liveReload : 'app/**/*.js'
+	liveReload : 'app/**/*.js',
+
+	session : {
+		secret : 'zupfkuchen'
+	},
+
+
 }

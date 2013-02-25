@@ -18,19 +18,17 @@ function error(status, msg) {
 function validateConstraints(route){
 	return function(req, res, next){
 		if(route.authorized && !req.session.user){
-			return res.redirect('/user/login');
+			return res.redirect(Yolo.config.http.notAuthorizedRedirect);
 		} 
 		next();
 	}
 };
 
 function callRoute(route){
-	var fn = route.to.split('.'),
-		controller = Yolo.controllers[fn[0]];
-
-	_.extend(controller.prototype, Yolo.Controller.prototype)
+	var fn = route.to.split('.');
 	
 	return function(req, res){
+		var controller = Yolo.controllers[fn[0]];
 		var n = new controller();
 		var params = _.extend({}, req.params, req.query, req.body, { files : req.files });
 		
@@ -59,7 +57,7 @@ var Http = function(){
 	this.server.use(express.cookieParser()); 
 
 	//use redis session store
-	this.server.use(connect.session({ store: new RedisStore({}), secret: 'zupfkuchen' }));
+	this.server.use(connect.session({ store: new RedisStore({}), secret: Yolo.config.session.secret  }));
 
 	//.html is the default extension
 	this.server.set("view engine", "html");
