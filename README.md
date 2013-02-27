@@ -9,9 +9,11 @@ Steps to make the server running like a horse. Unix Mac Osx Guide.
 
 2. __install couchdb__
 
+3. __install redis__
+
 4. __install dependencies__
 clone this repo, cd into the folder, type `$ npm install`
- 
+
 5. __configure__ modify the config/development.js
 
 ##Run
