@@ -24,6 +24,6 @@ to run the unit test install
 `$ npm install nodeunit -g`.
 
 ####TODO
-- [ ] Piapo
+-[x] Piapo
 
 
