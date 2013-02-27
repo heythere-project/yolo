@@ -62,5 +62,10 @@ module.exports = {
 
 	'its/:name' : {
 		to : 'Users.profile'
+	},
+
+	'its/me' : {
+		to : 'Users.edit',
+		via : 'post'
 	}
 };

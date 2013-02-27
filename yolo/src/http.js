@@ -34,9 +34,10 @@ function callRoute(route){
 		
 		n.request = req;
 		n.response = res;
-		n.currentUser = req.session.user;
-
-		n[fn[1]](params);
+		Yolo.models.User.findById( req.session.user.id, function(user){
+			n.currentUser = user[0];
+			n[fn[1]](params);
+		});
 	};
 };
 

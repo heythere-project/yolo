@@ -13,6 +13,8 @@
         <link rel="stylesheet" href="/assets/css/base.css">
         <link rel="stylesheet" href="/assets/css/main.css">
         <script src="/assets/js/vendor/modernizr-2.6.2.min.js"></script>
+        <script type="text/javascript" src="//use.typekit.net/usb5eca.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     </head>
     <body>
         <div class="navbar">
@@ -27,7 +29,7 @@
               </a>
          
               <!-- Be sure to leave the brand out there if you want it shown -->
-              <a class="brand" href="/"><img src="/assets/images/logo.png">Heythere</a>
+              <a class="brand" href="/"><img src="/assets/images/logo.png"></a>
          
               <!-- Everything you want hidden at 940px or less, place within here -->
               <div class="nav-collapse collapse">
@@ -37,7 +39,7 @@
               </div>
               <% if(typeof user != 'undefined'){ %>
               <div class="pull-right">
-                <a href="/its/me"><%=user.firstName%> <%=user.lastName %></a>
+                <a href="/its/me"><%=user.get("firstName")%> <%=user.get("lastName") %></a>
                 <form method="post" action="/user/logout" class="form-inline">    
                     <button type="submit" class="btn btn-mini">Logout</button>
                 </form></div>

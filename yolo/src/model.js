@@ -27,6 +27,24 @@ _.extend( BaseModel.prototype, {
 		}
 		return !errors;
 	},
+
+	attach : function(name, file){
+		if(_.isObject(name)){
+			return _.each(files, _.bind(function(name, file){
+				this.attach(name, file)
+			}, this));
+		}
+
+		if(!this.get("_attachments")){
+			this.set("_attachments") = {};
+		}
+
+		var files = _.clone(this.get('_attachments'));
+
+		files[name] = file;
+
+		this.set('_attachments', file);
+	},
 	
 	save: function(options) {
       	var attrs, success, method, attributes = this.attributes;

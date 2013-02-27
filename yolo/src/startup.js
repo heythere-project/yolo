@@ -48,6 +48,10 @@ module.exports = {
 		return l;
 	},
 
+	/*
+		this active record like stuff should move into a more
+		model related file	
+	*/
 	initializeModel : function(path, model, name){
 		var	Model = require(path + model),
 			model_instance = new Model(),
@@ -107,7 +111,7 @@ module.exports = {
 						console.log(err);
 						return cb.call(ctx || this, res);
 					}
-						
+						console.log(result, result._attachments)
 					//we loop over each item in db result and create a class instance with the result values
 					for(var i = 0, len = result.length, item = result[i], Model; i < len; i++, item = result[i]){
 

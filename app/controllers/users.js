@@ -1,5 +1,6 @@
 var bcrypt = require('bcrypt'),
 	hashSync = function(str){ return bcrypt.hashSync(str, bcrypt.genSaltSync(10)) },
+	ImageProcessor = require('./../modules/imageProcessor'),
 	User = Yolo.models.User;
 
 var Users = Yolo.Controller.extend({
@@ -72,7 +73,6 @@ var Users = Yolo.Controller.extend({
 
 					//set session cockie here
 					self.request.session.user = user;
-
 					self.redirect("/");
 				} else {
 					self.renderHTML("users/login", {
@@ -92,8 +92,93 @@ var Users = Yolo.Controller.extend({
 	},
 
 	profile : function(){
+		console.log(this.currentUser.attributes)
 		this.renderHTML('users/profile', {user : this.currentUser });
-	}
+	},
+
+	edit : function(params){
+		var self = this,
+			last_rev = this.currentUser.get("_rev");
+
+		if(params.files.cover.size > 0){
+			return;
+
+			var covers = new ImageProcessor({
+				image : params.files.cover.path,
+				styles : {
+					profile : {
+						geometry : { width : 600, height: 1000 },
+						format : 'jpg'
+					},
+
+					/*original : {
+						format : 'jpg'
+					}*/
+				}
+			});
+
+			covers.on('style', function(style, imgBuffer){
+				Yolo.db.saveAttachment({ 
+			  		id : self.currentUser.id,
+			  		rev : last_rev
+			  	},{
+	                name: 'cover_' + style + '.jpg', 
+	                contentType: params.files.cover.type, 
+	                body: imgBuffer
+               }, function(err, result){
+               		if(err) return console.warn(err);
+               		last_rev = result.rev;
+               });
+			});
+
+			covers.on('done', function(){
+				console.log("cover done");
+			});
+		}
+
+		if(params.files.profile.size > 0){
+			var profiles = {}, 
+				processor = new ImageProcessor({
+					image : params.files.profile.path,
+					styles : {
+						small : {
+							geometry : { width : 50, height: 50},
+							format : 'jpg'
+						},
+						medium : {
+							geometry : { width : 100, height: 100},
+							format : 'jpg'
+						},
+						large : {
+							geometry : { width : 250, height: 250},
+							format : 'jpg'
+						},
+						/*original : {
+							format : 'jpg'
+						}*/
+					}
+				});
+
+			processor.on('style', function(style, imgBuffer){
+				profiles[style] = {
+					name: 'profile_' + style + '.jpg', 
+	                contentType: params.files.cover.type, 
+	                data: imgBuffer
+				};
+			});
+
+			processor.on('done', function(){
+				Yolo.db.merge(self.currentUser.id, {
+					_rev : self.currentUser.get('_rev'),
+					_attachments : profiles
+				}, function(){
+					console.log(arguments);
+				});
+			});
+		}
+
+		this.renderHTML('users/profile', {user : this.currentUser });
+	},
 });
 
 //export Users controller

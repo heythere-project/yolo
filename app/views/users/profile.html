@@ -1,12 +1,55 @@
  <% layout('../index') -%>
 
- <div class="page-header">
-  <h1><%=user.firstName%> <%= user.lastName%></h1>
+
+<div class="row-fluid profile">
+	<div class="span4">
+		<div class="cover" style="background-image:url(<%= user.get("cover_picture") ? user.get("cover_picture") : '/assets/images/default_cover.jpg' %>); ">
+			<div class="cover-body">
+				<div class="cover-body-inner">
+					<% if(user.get('profile_picture')){ %>
+						<div class="cover-img"></div>
+					<% } %>
+					<h1><%=user.get("firstName")%> <%= user.get("lastName")%></h1>
+					<p class="cover-description">CEO &amp; Founder of wemakeweb</p>
+					<button class="btn tk-ff-meta-web-pro">+ Add Friend </button>
+				</div>
+			</div>
+		</div>
+	</div>
+  	<div class="span8">
+  		<div><button class="btn tk-ff-meta-web-pro" onclick="$(this).parent().next().toggle();">Edit</button></div>
+  		<div class="edit-form" style="display:none">
+  			<form method="post" enctype="multipart/form-data">
+  				 <div class="control-group">
+				    <label class="control-label" for="inputBio">Bio</label>
+				    <div class="controls">
+				      <textarea id="inputBio" name="bio"></textarea>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="control-label" for="inputProfile">Profile Picture</label>
+				    <div class="controls">
+				      <input type="file" name="profile" id="inputProfile" />
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="control-label" for="inputProfile">Cover Picture</label>
+				    <div class="controls">
+				      <input type="file" name="cover" id="inputCover" />
+				    </div>
+				  </div>
+
+				  <button class="btn tk-ff-meta-web-pro">Save</button>
+  			</form>
+  		</div>
+
+
+  		<ul class="nav nav-tabs">
+		  <li class="active"><a href="#">Activity</a></li>
+		  <li><a href="#">Friends</a></li>
+		</ul>
+	</div>
 </div>
 
-<ul class="nav nav-tabs">
-  <li class="active">
-    <a href="#">Wall</a>
-  </li>
-  <li><a href="#">Friends</a></li>
-</ul>
+
+

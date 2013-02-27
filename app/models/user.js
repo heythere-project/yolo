@@ -6,7 +6,8 @@ var User = Yolo.Model.extend({
 		lastName : null,
 		email : null,
 		password : null,
-		picture : null,
+		profile_picture : null,
+		cover_picture : null,
 		lastLogin : new Date()
 	},
 

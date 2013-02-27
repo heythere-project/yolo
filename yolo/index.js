@@ -8,6 +8,12 @@ _ = require('underscore');
 
 function YoloApp(){};
 
+/*
+	this method is doing all the magic 
+	follow the function calls if you want to know 
+	who yolo works…
+*/
+
 YoloApp.prototype.run = function(options) {
 	//global constants
 	PATH = __dirname.replace('/yolo', '/') 
