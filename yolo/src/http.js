@@ -28,16 +28,30 @@ function callRoute(route){
 	var fn = route.to.split('.');
 	
 	return function(req, res){
+		//lockup controller by name defined into the route and initialize 
 		var controller = Yolo.controllers[fn[0]];
 		var n = new controller();
+
+		//merge all into one params object
 		var params = _.extend({}, req.params, req.query, req.body, { files : req.files });
 		
+		//make these in the controller available
 		n.request = req;
 		n.response = res;
-		Yolo.models.User.findById( req.session.user.id, function(user){
-			n.currentUser = user[0];
+		n.currentUser = null;
+
+		//if the user has a session we lookup the user in the db
+		if(req.session.user){
+			Yolo.models.User.findById( req.session.user.id, function(user){
+				if(user){
+					n.currentUser = user[0];
+				}
+				n[fn[1]](params);
+			});
+		} else {
+			//otherwise call directly
 			n[fn[1]](params);
-		});
+		}
 	};
 };
 
