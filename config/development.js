@@ -20,5 +20,10 @@ module.exports = {
 		secret : 'zupfkuchen'
 	},
 
-
-}
+	model : {
+		attachments : {
+			host : "http://localhost:5984/heythere/",
+			includeExtension : false,
+		}
+	}
+};

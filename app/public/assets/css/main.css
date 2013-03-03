@@ -75,6 +75,7 @@ padding: 4px 12px 1px 12px;
 	border-radius: 100px;
 	position: relative;
 	margin-left: 25%;
+	overflow: hidden;
 }
 .profile .cover-body .btn{
 	margin-bottom: 50px;

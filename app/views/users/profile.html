@@ -6,8 +6,10 @@
 		<div class="cover" style="background-image:url(<%= user.get("cover_picture") ? user.get("cover_picture") : '/assets/images/default_cover.jpg' %>); ">
 			<div class="cover-body">
 				<div class="cover-body-inner">
-					<% if(user.get('profile_picture')){ %>
-						<div class="cover-img"></div>
+					<% if(user.attachments("profile_medium")){ %>
+						<div class="cover-img">
+							<img src="<%= user.attachments('profile_medium').url %> " />
+						</div>
 					<% } %>
 					<h1><%=user.get("firstName")%> <%= user.get("lastName")%></h1>
 					<p class="cover-description">CEO &amp; Founder of wemakeweb</p>

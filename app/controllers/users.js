@@ -97,10 +97,9 @@ var Users = Yolo.Controller.extend({
 	},
 
 	edit : function(params){
-		var self = this,
-			last_rev = this.currentUser.get("_rev");
+		var self = this;
 
-		if(params.files.cover.size > 0){
+	/*	if(params.files.cover.size > 0){
 			return;
 
 			var covers = new ImageProcessor({
@@ -111,34 +110,15 @@ var Users = Yolo.Controller.extend({
 						format : 'jpg'
 					},
 
-					/*original : {
-						format : 'jpg'
-					}*/
+				//	/*original : {
+				//		format : 'jpg'
+				//	}
 				}
 			});
-
-			covers.on('style', function(style, imgBuffer){
-				Yolo.db.saveAttachment({ 
-			  		id : self.currentUser.id,
-			  		rev : last_rev
-			  	},{
-	                name: 'cover_' + style + '.jpg', 
-	                contentType: params.files.cover.type, 
-	                body: imgBuffer
-               }, function(err, result){
-               		if(err) return console.warn(err);
-               		last_rev = result.rev;
-               });
-			});
-
-			covers.on('done', function(){
-				console.log("cover done");
-			});
-		}
+		}*/
 
 		if(params.files.profile.size > 0){
-			var profiles = {}, 
-				processor = new ImageProcessor({
+			var processor = new ImageProcessor({
 					image : params.files.profile.path,
 					styles : {
 						small : {
@@ -160,20 +140,11 @@ var Users = Yolo.Controller.extend({
 				});
 
 			processor.on('style', function(style, imgBuffer){
-				profiles[style] = {
-					name: 'profile_' + style + '.jpg', 
-	                contentType: params.files.cover.type, 
-	                data: imgBuffer
-				};
+				self.currentUser.attach('profile_' + style, params.files.profile.type, imgBuffer);
 			});
 
 			processor.on('done', function(){
-				Yolo.db.merge(self.currentUser.id, {
-					_rev : self.currentUser.get('_rev'),
-					_attachments : profiles
-				}, function(){
-					console.log(arguments);
-				});
+				self.currentUser.save();
 			});
 		}
 

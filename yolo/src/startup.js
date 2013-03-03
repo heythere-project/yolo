@@ -111,10 +111,9 @@ module.exports = {
 						console.log(err);
 						return cb.call(ctx || this, res);
 					}
-						console.log(result, result._attachments)
 					//we loop over each item in db result and create a class instance with the result values
 					for(var i = 0, len = result.length, item = result[i], Model; i < len; i++, item = result[i]){
-
+						
 						//lockup the model							
 						if( (Model = Yolo.models[formatName(item.value.type)]) ){
 							//type is only for db storing and referncing back to the model
