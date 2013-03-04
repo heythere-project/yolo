@@ -6,14 +6,14 @@ var User = Yolo.Model.extend({
 		lastName : null,
 		email : null,
 		password : null,
-		profile_picture : null,
-		cover_picture : null,
+		bio : null,
 		lastLogin : new Date()
 	},
 
 	validation : {
 		firstName : { required : true },
 		lastName : { required : true },
+		bio : { required: false, maxLength : 180 },
 		email : { pattern: 'email' },
 		password : { required: true, minLength : 5}
 	},

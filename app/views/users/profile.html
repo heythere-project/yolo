@@ -3,7 +3,7 @@
 
 <div class="row-fluid profile">
 	<div class="span4">
-		<div class="cover" style="background-image:url(<%= user.get("cover_picture") ? user.get("cover_picture") : '/assets/images/default_cover.jpg' %>); ">
+		<div class="cover" style="background-image:url(<%= user.attachments("cover_profile") ? user.attachments("cover_profile").url : '/assets/images/default_cover.jpg' %>); ">
 			<div class="cover-body">
 				<div class="cover-body-inner">
 					<% if(user.attachments("profile_medium")){ %>
@@ -12,7 +12,7 @@
 						</div>
 					<% } %>
 					<h1><%=user.get("firstName")%> <%= user.get("lastName")%></h1>
-					<p class="cover-description">CEO &amp; Founder of wemakeweb</p>
+					<p class="cover-description"><%= user.get("bio") ? user.get("bio") : "" %></p>
 					<button class="btn tk-ff-meta-web-pro">+ Add Friend </button>
 				</div>
 			</div>
@@ -20,12 +20,19 @@
 	</div>
   	<div class="span8">
   		<div><button class="btn tk-ff-meta-web-pro" onclick="$(this).parent().next().toggle();">Edit</button></div>
-  		<div class="edit-form" style="display:none">
+  		<div class="edit-form" style="display:<%= typeof errors == 'undefined' ? 'none' : 'inline-block' %>">
+  			<% if (typeof errors != 'undefined'){ %>
+			  <div class="alert">
+			    <% for( var e in errors){ %>
+			      <%= errors[e] %> 
+			    <% } %>
+			  </div>
+			<% } %>
   			<form method="post" enctype="multipart/form-data">
   				 <div class="control-group">
 				    <label class="control-label" for="inputBio">Bio</label>
 				    <div class="controls">
-				      <textarea id="inputBio" name="bio"></textarea>
+				      <textarea id="inputBio" name="bio"><%= user.get("bio") ? user.get("bio") : "" %></textarea>
 				    </div>
 				  </div>
 				  <div class="control-group">

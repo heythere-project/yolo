@@ -92,17 +92,21 @@ var Users = Yolo.Controller.extend({
 	},
 
 	profile : function(){
-		console.log(this.currentUser.attributes)
 		this.renderHTML('users/profile', {user : this.currentUser });
 	},
 
 	edit : function(params){
-		var self = this;
+		var self = this,
+			wait = 0;
 
-	/*	if(params.files.cover.size > 0){
-			return;
+		if(params.bio){
+			this.currentUser.set('bio', params.bio);
+		}
 
-			var covers = new ImageProcessor({
+		if(params.files.cover.size > 0){
+			wait++;
+
+			var coverProcessor = new ImageProcessor({
 				image : params.files.cover.path,
 				styles : {
 					profile : {
@@ -110,15 +114,23 @@ var Users = Yolo.Controller.extend({
 						format : 'jpg'
 					},
 
-				//	/*original : {
-				//		format : 'jpg'
-				//	}
+					original : {
+						format : 'jpg'
+					}
 				}
 			});
-		}*/
+
+			coverProcessor.on('style', function(style, imgBuffer){
+				self.currentUser.attach('cover_' + style, params.files.cover.type, imgBuffer);
+			});
+
+			coverProcessor.on('done', _.bind(done, this));
+		}
 
 		if(params.files.profile.size > 0){
-			var processor = new ImageProcessor({
+			wait++;
+
+			var profileProcessor = new ImageProcessor({
 					image : params.files.profile.path,
 					styles : {
 						small : {
@@ -133,22 +145,44 @@ var Users = Yolo.Controller.extend({
 							geometry : { width : 250, height: 250},
 							format : 'jpg'
 						},
-						/*original : {
+						original : {
 							format : 'jpg'
-						}*/
+						}
 					}
 				});
 
-			processor.on('style', function(style, imgBuffer){
+			profileProcessor.on('style', function(style, imgBuffer){
 				self.currentUser.attach('profile_' + style, params.files.profile.type, imgBuffer);
 			});
 
-			processor.on('done', function(){
-				self.currentUser.save();
-			});
+			profileProcessor.on('done', _.bind(done, this));
 		}
 
-		this.renderHTML('users/profile', {user : this.currentUser });
+		function done(){
+			if(--wait === 0){
+				render.call(this);
+			}
+		};
+
+		function render(){
+			if(wait !== 0){
+				return;
+			}
+
+			if(this.currentUser.isValid()){
+				this.renderHTML('users/profile', {user : this.currentUser });
+				this.currentUser.save();
+			} else {
+				//maybe we could save the profile picture even if the cover processing failed
+				this.renderHTML('users/profile', {
+					user : this.currentUser, 
+					errors: this.currentUser.validationError 
+				});
+			}
+		}
+
+		render.call(this);
+
 	},
 });
 

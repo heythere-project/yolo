@@ -22,8 +22,19 @@ _.extend( BaseModel.prototype, {
 
 	idAttribute : "_id",
 
-	isValid : function(){
+	isValid : function(){	
+		/*
+			validation with attachments is extremly slow even if they dont
+			have validation rules. We remove the attachments for validation
+			and add them again after the validation to overcome this bootleneck.
+		*/
+		var attachments = this.attributes._attachments;
+		delete this.attributes._attachments;
+
 		var errors = this.validate();
+
+		this.attributes._attachments = attachments;
+
 		if(errors){
 			this.validationError = errors;
 		}
@@ -71,12 +82,20 @@ _.extend( BaseModel.prototype, {
 	},
 	
 	save: function(options) {
-      	var attrs, success, method, attributes = this.attributes;
-
+      	var attrs, success, method, attachments = this.attributes._attachments, attributes = this.attributes, start = new Date();
+      	/*
+			validation with attachments is extremly slow even if they dont
+			have validation rules. We remove the attachments for validation
+			and add them again after the validation to overcome this bootleneck.
+		*/
+      	delete attributes._attachments;
       	options = _.extend({validate: true, parse: true }, options);
 
       	// Do not persist invalid models.
-      	if (!this._validate(attrs, options)) return false;
+      	if (!this._validate(attributes, options)) return false;
+
+      	//append the models again
+      	this.attributes._attachments = attachments;
 
     	success = options.success;
 		options.success = function(model, resp, options) {
@@ -84,10 +103,12 @@ _.extend( BaseModel.prototype, {
 		  		return false;
 			}
 			if (success) success(model, resp, options);
+			Yolo.logger.info('Model.save took ' + (new Date() - start) + 'ms')
 		};
 
       // Finish configuring and sending the Ajax request.
     	method = this.isNew() ? 'create' : 'update';
+
      	this.sync(method, this, options);
     },
 
@@ -105,7 +126,6 @@ _.extend( BaseModel.prototype, {
 
     	if(attachments){
     		for(var fileName in attachments){
-
     			/*	if the file has a body attribute it is a new one
     				we convert the body buffer to a base64 string
     				for storing in db 
@@ -116,6 +136,9 @@ _.extend( BaseModel.prototype, {
     			}
     		}
        	}
+
+       	//set the attachments to the hash
+       	hash["_attachments"] = attachments;
 
     	// set the _type to model_name so we know to which model typ the data belongs
     	hash["type"] = model.model_name;    
@@ -155,7 +178,6 @@ _.extend( BaseModel.prototype, {
 	    }
 
 	    Yolo.logger.info(log);
-
 	}
 });
 
