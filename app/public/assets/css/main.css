@@ -58,6 +58,8 @@ padding: 4px 12px 1px 12px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+	word-break: break-all;
+	word-wrap: normal;
 }
 .profile .cover-body .cover-body-inner {
 	position: relative;
