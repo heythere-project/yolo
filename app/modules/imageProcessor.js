@@ -46,7 +46,7 @@ ImageProcessor.prototype.process = function(){
 				}, afterProcessing);
 			} else {
 				//if not we only convert the image
-				imagemagick.convert([processer.image, '-quality', '80', ':-' ],  afterProcessing);
+				imagemagick.convert([processer.image, '-quality', '80', options.format + ':-' ],  afterProcessing);
 			}
 
 
