@@ -5,36 +5,58 @@ var bcrypt = require('bcrypt'),
 
 var Users = Yolo.Controller.extend({
 	register : function(params){
-		var user = new User({
-			firstName : params.firstName,
-			lastName : params.lastName,
-			email : params.email
-		});
+		
+		//email have to unique into db
+		User.findByEmail(params.email, function(users){
+			
+			if(users.length != 0){
+				this.renderHTML( 'users/register', {
+					message : 'validation error',
+					errors : {
+						email : "An account with this email allready exists"
+					}
+				});
+				this.renderJSON({
+					message : 'validation error',
+					errors : {
+						email : "An account with this email allready exists"
+					}
+				});
 
+				return;
+			}
 
-		if(params.password){
-			user.set('password', hashSync(params.password));
-		}
-
-		if( !user.isValid() ){
-			this.renderHTML( 'users/register', {
-				message : 'validation error',
-				errors : user.validationError
+			var user = new User({
+				firstName : params.firstName,
+				lastName : params.lastName,
+				email : params.email
 			});
-			this.renderJSON({
-				message : 'validation error',
-				errors : user.validationError
-			});
 
-			return;
-		} 
 
-		user.save({
-			success : _.bind(function(user){
-				this.request.session.user = user;
-				this.redirect("/")
-			}, this)
-		});	
+			if(params.password){
+				user.set('password', hashSync(params.password));
+			}
+
+			if( !user.isValid() ){
+				this.renderHTML( 'users/register', {
+					message : 'validation error',
+					errors : user.validationError
+				});
+				this.renderJSON({
+					message : 'validation error',
+					errors : user.validationError
+				});
+
+				return;
+			} 
+
+			user.save({
+				success : _.bind(function(user){
+					this.request.session.user = user;
+					this.redirect("/")
+				}, this)
+			});	
+		}, this);	
 	},
 
 	registerForm : function(){
@@ -72,7 +94,7 @@ var Users = Yolo.Controller.extend({
 					user.save();
 
 					//set session cockie here
-					self.request.session.user = user;
+					self.request.session.user = user.toJSON();
 					self.redirect("/");
 				} else {
 					self.renderHTML("users/login", {
