@@ -34,8 +34,19 @@ ImageProcessor.prototype.process = function(){
 		len++;
 
 		(function(options, style, processer){
+			if(options.crop){
+				var geometry = _.extend({width:0, height:0}, options.geometry);
+
+				imagemagick.crop({
+					srcPath : processer.image,
+					format : options.format,
+					width : geometry.width,
+					height : geometry.height,
+					gravity : options.gravity || "North"
+				}, afterProcessing)
+			}
 			//if geometry options are passed we resize the image
-			if(options.geometry){
+			else if(options.geometry){
 				var geometry = _.extend({width:0, height:0}, options.geometry);
 				
 				imagemagick.resize({
@@ -44,8 +55,9 @@ ImageProcessor.prototype.process = function(){
 					width : geometry.width,
 					height : geometry.height
 				}, afterProcessing);
-			} else {
-				//if not we only convert the image
+			} 
+			//if not we only convert the image
+			else {
 				imagemagick.convert([processer.image, '-quality', '80', options.format + ':-' ],  afterProcessing);
 			}
 

@@ -133,6 +133,7 @@ var Users = Yolo.Controller.extend({
 				styles : {
 					profile : {
 						geometry : { width : 600, height: 1000 },
+						crop : true,
 						format : 'jpg'
 					},
 

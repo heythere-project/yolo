@@ -49,6 +49,7 @@ padding: 4px 12px 1px 12px;
 	height: 100%;
 	max-width: 500px;
 	color:#fff;
+	background-size: cover;
 }
 .profile .cover-body{
 	position: absolute;
