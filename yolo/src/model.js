@@ -14,8 +14,19 @@ var Backbone = require('backbone'),
 /* we use the Backbone Model as base */
 var BaseModel = Backbone.Model;
 
+
+/* we add the sanitize fake validator to use the 'sanitize' attribute which should be used for models
+that should not be sanitzed before saving to db */
+_.extend(validation.validators, {
+  sanitize: function(value, attr, customValue, model) {
+  	return undefined;
+  }
+ });
+
+
 /* extend it with Backbone validations https://github.com/thedersen/backbone.validation#using-server-validation */
 _.extend( BaseModel.prototype, validation.mixin );
+
 
 /* extend the methods with ours */
 _.extend( BaseModel.prototype, { 
@@ -93,6 +104,13 @@ _.extend( BaseModel.prototype, {
 
       	// Do not persist invalid models.
       	if (!this._validate(attributes, options)) return false;
+
+      	//sanitze all strings
+      	_.each(this.defaults, function(value, key){
+      		if(this.validation[key] && ( ! ("sanitize" in this.validation[key]) || this.validation[key].sanitize === true) ){
+      			this.attributes[key] = _.escape(this.attributes[key]);
+      		}
+      	}, this);
 
       	//append the models again
       	this.attributes._attachments = attachments;

@@ -15,7 +15,7 @@ var User = Yolo.Model.extend({
 		lastName : { required : true },
 		bio : { required: false, maxLength : 180 },
 		email : { pattern: 'email' },
-		password : { required: true, minLength : 5}
+		password : { required: true, minLength : 5, sanitize: false }
 	},
 
 	views : {}
