@@ -18,7 +18,28 @@ var User = Yolo.Model.extend({
 		password : { required: true, minLength : 5, sanitize: false }
 	},
 
-	views : {}
+	views : {},
+
+	initialize : function(){
+		
+		/*
+			this.after("validate", function(){
+				console.log("after validated")
+			})
+			this.before("validate", function(){
+				console.log("before validated")
+			})
+
+			this.after("save", function(){
+				console.log("after save")
+			})
+			this.before("save", function(){
+				console.log("before save")
+			})
+
+		*/
+
+	},
 });
 
 

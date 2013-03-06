@@ -33,7 +33,11 @@ _.extend( BaseModel.prototype, {
 
 	idAttribute : "_id",
 
-	isValid : function(){	
+	isValid : function(){
+	
+		//emit event
+		this.trigger("validate:before");
+
 		/*
 			validation with attachments is extremly slow even if they dont
 			have validation rules. We remove the attachments for validation
@@ -49,6 +53,9 @@ _.extend( BaseModel.prototype, {
 		if(errors){
 			this.validationError = errors;
 		}
+
+		this.trigger("validate:after", this.validationError);
+
 		return !errors;
 	},
 
@@ -91,6 +98,24 @@ _.extend( BaseModel.prototype, {
 		} 
 		
 	},
+
+	//shortcut to after event
+	after : function(what, fn, ctx){
+		if(ctx){
+			fn = _.bind(fn, ctx);
+		}
+
+		this.on( what + ':after', fn );
+	},
+
+	//shortcut to before event
+	before : function(what, fn, ctx){
+		if(ctx){
+			fn = _.bind(fn, ctx);
+		}
+
+		this.on( what + ':before', fn );
+	},
 	
 	save: function(options) {
       	var attrs, success, method, attachments = this.attributes._attachments, attributes = this.attributes, start = new Date();
@@ -102,8 +127,13 @@ _.extend( BaseModel.prototype, {
       	delete attributes._attachments;
       	options = _.extend({validate: true, parse: true }, options);
 
+      	this.trigger("validate:before");
+
       	// Do not persist invalid models.
       	if (!this._validate(attributes, options)) return false;
+
+      	this.trigger("validate:after", this.validationError);
+
 
       	//sanitze all strings
       	_.each(this.defaults, function(value, key){
@@ -138,6 +168,8 @@ _.extend( BaseModel.prototype, {
 		functionality.
 	*/
 	sync : function(method, model, options){
+		model.trigger("save:before");
+
     	var hash = model.toJSON(options),
     		attachments = model.attributes._attachments,
     		log = "";
@@ -165,12 +197,14 @@ _.extend( BaseModel.prototype, {
 	    options.success = function(resp) { 
 	      if (success) success(model, resp, options);
 	      model.trigger('sync', model, resp, options);
+	      model.trigger("save:after", model, resp);
 	    };
 
 	    var error = options.error;
 	    options.error = function(err) {
 	      if (error) error(model, err, options);
 	      model.trigger('error', model, err, options);
+   	      model.trigger("save:after", model, resp);
 	    };
 
 	    if(method === "create"){
