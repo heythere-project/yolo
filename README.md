@@ -22,6 +22,13 @@ clone this repo, cd into the folder, type `$ npm install`
 $ node app.js
 ```
 ##Models
+Yolo.Model is basiclly a Backbone.Model extended with validation and a couchdb layer. Models go into `app/models` and are loaded automaticlly if Yolo boots. 
+You define a model by extending the Yolo.Model:
+```js
+	module.exports = Yolo.Model.extend({ 		
+	//…
+	});
+```
 ###Scaffolding
 Generate Models easily with the generator.js . This would generate a model named "post" with attributes title, content and author and title would be required field.
 
@@ -34,6 +41,14 @@ Find out more options via
 $ node generate.js
 ```
 ###Defaults
+Define Defaults for each attribute you will add to the later. Defaults can be anything like Strings, Numbers or Objects. If the attribute wont be overwritten the default value will be used instead. 
+```js
+defaults : {
+	content : null
+}
+```
+
+
 ###Validation
 ###Views
 ###Working with Models
