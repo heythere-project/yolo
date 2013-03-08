@@ -118,7 +118,7 @@ user.save({
 });
 ```
 __Note__: Only valid models will be saved to database. You should call **Model.isValid()** before to check that.
-####Model.isValid()
+####isValid
 To check if a model is valid:
 ```js
 if( ! user.isValid() ){
