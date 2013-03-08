@@ -1,10 +1,10 @@
 var usage = [
 		'\033[4m' + "Yolo Generator!" + '\033[24m',
 		"Generate Model 'Post' with attributes: id and author and content:",
-		'\033[34m' + "$0 model post id author content" + '\033[39m',
+		'\033[34m' + "$0 model post id:required author content" + '\033[39m',
 		"",
 		"Generate Controller 'Posts' with methods: index, edit and delete:",
-		'\033[34m' + "$0 controller posts index edit delete" + '\033[39m',
+		'\033[34m' + "$0 controller posts index edit:post delete:delete" + '\033[39m',
 		"",
 		"More help at https://github.com/wemakeweb/heythere_appserver",
 		
@@ -192,7 +192,7 @@ if(args._[0] === "controller"){
 					try{
 						require(rootPath + '/../config/routes.js');
 					} catch(err){
-						console.error('\033[32m%s\033[39m', 'Error while generating route - Couldnt add routes, rolling back' );
+						console.error('\033[32m%s\033[39m', 'Error while generating route - Couldnt add routes, Please add them manually' );
 						fs.writeFileSync(rootPath + '/../config/routes.js', backup);
 						process.exit(1);
 					}
