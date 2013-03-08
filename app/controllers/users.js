@@ -6,7 +6,7 @@ var bcrypt = require('bcrypt'),
 var Users = Yolo.Controller.extend({
 	register : function(params){
 		
-		//email have to unique into db
+		//email has to unique into db
 		User.findByEmail(params.email, function(users){
 			
 			if(users.length != 0){
