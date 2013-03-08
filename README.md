@@ -117,14 +117,24 @@ user.save({
 	}
 });
 ```
-__Note__: Only valid models will be saved to database. You should call **model.isValid()** before to check that.
+__Note__: Only valid models will be saved to database. You should call **Model.isValid()** before to check that.
 ####Model.isValid()
 To check if a model is valid:
 ```js
-if( ! model.isValid() ){
+if( ! user.isValid() ){
 	console.log(model.validationError)
 }
 ```
+####attach(name, mimeType, buffer)
+You can attach files to models which will be stored as attachments to couchdb via:
+```js
+user.attach('profile', 'image/jpeg', imgBuffer);
+```
+After saving this to database you can get those attachments, for example in a template via:
+```js
+user.attachments('profile').url
+```
+
 ##Controllers
 Controllers take the main part in handling incoming requests and processing them.
 ###Scaffolding
