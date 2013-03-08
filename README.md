@@ -152,7 +152,7 @@ $ node generate.js
 
 A controller consists of a group of methods which handle one type of request defined in the **route**. Example:
 ```js
-Yolo.Controller.extend({
+module.exports = Yolo.Controller.extend({
 	index : function(params){
 		this.renderHTML("dashboard/index", {user : this.currentUser });
 	}
