@@ -18,14 +18,21 @@ clone this repo, cd into the folder, type `$ npm install`
 
 ##Start
 
-`$ node app.js`
+```bash
+$ node app.js
+```
 ##Models
 ###Scaffolding
 Generate Models easily with the generator.js . This would generate a model named "post" with attributes title, content and author and title would be required field.
 
-`$ node generate.js model post title:required content author`
+```bash
+$ node generate.js model post title:required content author
+```
 
-Find out more options via `$ node generate.js`
+Find out more options via 
+```bash 
+$ node generate.js
+```
 ###Defaults
 ###Validation
 ###Views
@@ -37,8 +44,13 @@ Find out more options via `$ node generate.js`
 ###Scaffolding
 Generate Controllers easily with the generator.js . This would generate a controller namend "posts" with methods index, edit and delete. Method "edit" will be acessabble via 'POST' and "delete" via 'DELETE'. Routes to those methods will be added automatically.
 
-`$ node generate.js controller posts index edit:post delete:delete`
+```bash
+$ node generate.js controller posts index edit:post delete:delete
+```
 
-Find out more options via `$ node generate.js`
+Find out more options via 
+```bash
+$ node generate.js
+```
 ##Views
 ##Routes
