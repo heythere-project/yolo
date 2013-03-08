@@ -15,6 +15,8 @@ var usage = [
 	toUpperCase = function(str){
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	},
+	tab1 = "	",
+	tab2 = "		",
 	args = require('optimist')
 			.usage(usage)
 			.demand('_')
@@ -56,7 +58,7 @@ var usage = [
 		"			}",
 		"		}",
 		"	},",
-		"	/*",
+		"	*/",
 		"",
 		"	/*",
 		"		This Method is called when the Model gets initialized.",
@@ -75,20 +77,69 @@ var usage = [
 		"module.exports = $0;"
 	].join('\n');
 
-console.log('\033[4m' + "Yolo Generator!" + '\033[24m');
+	controller_template = [
+		"var $0 = Yolo.Controller.extend({",							
+		"	/*",
+		"		The following methods and attributes are available in each method:",
+		"			this.currentUser",
+		"			this.renderHTML(template, options = {})",
+		"			this.renderJSON(options = {})",
+		"			this.redirect(path)",
+		"		more about them at https://github.com/wemakeweb/heythere_appserver#controllers",
+		"	*/",
+		"",
+		"$1",
+		"});",
+		"",
+		"module.exports = $0;"
+	].join('\n');
 
 if(args._[0] === "controller"){
+	var path = args.path + 'controllers',
+		name = args._[1].toLowerCase(),
+		methods = args._.slice(2),
+		methodsStr = [];
 
+		if(!fs.existsSync(path)){
+			console.log("Created Folder " + path);
+			fs.mkdirSync(path);
+		} 
+
+		if(fs.existsSync(path + '/' + name + '.js')){
+			console.error('\033[32m%s\033[39m', 'Controller with Name "' + name + '" allready exists!' );
+			process.exit(1);
+		}
+
+		methods.forEach(function(method){
+			methodsStr.push(tab1 + '/*');
+			methodsStr.push(tab2 + '[GET] ' + toUpperCase(name) + '.' + method);
+			methodsStr.push(tab1 + '*/');
+			methodsStr.push(tab1 + method + ' : function( params ){ ');
+			methodsStr.push(tab2);
+			methodsStr.push(tab1 + '},');
+			methodsStr.push('');
+		});
+
+		controller_template = controller_template.replace(/\$0/g, toUpperCase(name));
+		controller_template = controller_template.replace(/\$1/g, methodsStr.join('\n'));
+
+		if(args.clean){
+			controller_template = controller_template.replace(/(?:\/\*(?:[\s\S]*?)\*\/)|(?:\/\/(?:.*)$)/gm
+, '');
+		}
+
+		fs.writeFileSync(path + '/' + name + '.js', controller_template);
+		console.log('\033[34m%s\033[39m' , "Created Controller '" + toUpperCase(name) + "' at " + path + '/' + name + '.js' + " ✔");
 
 } else if(args._[0] === "model"){
 	var path = args.path + 'models',
-		name = args._[1],
+		name = args._[1].toLowerCase(),
 		attributes = args._.slice(2),
 		attributeStr = [],
-		validatesStr = [],
-		Tab2 = "		";
+		validatesStr = [];
 
 	if(!fs.existsSync(path)){
+		console.log("Created Folder " + path);
 		fs.mkdirSync(path);
 	} 
 
@@ -102,13 +153,13 @@ if(args._[0] === "controller"){
 			var parts = attribute.split(':');
 
 			if(parts[1] === "required"){
-				validatesStr.push(Tab2 + parts[0] + ' : { required : true },');
+				validatesStr.push(tab2 + parts[0] + ' : { required : true },');
 			}
 
-			attributeStr.push(Tab2 + parts[0] + ' : null,' );
+			attributeStr.push(tab2 + parts[0] + ' : null,' );
 		} else {
-			attributeStr.push(Tab2 + attribute + ': null,');
-			validatesStr.push(Tab2 + attribute + ' : { required : false },');
+			attributeStr.push(tab2 + attribute + ': null,');
+			validatesStr.push(tab2 + attribute + ' : { required : false },');
 		}
 	});
 
@@ -123,5 +174,5 @@ if(args._[0] === "controller"){
 	}
 
 	fs.writeFileSync(path + '/' + name + '.js', model_template);
-	console.log('\033[34m%s\033[39m' , "Model '" + name + "' generated!");
+	console.log('\033[34m%s\033[39m' , "Created model '" + toUpperCase(name) + "' at " + path + '/' + name + '.js' + " ✔");
 }

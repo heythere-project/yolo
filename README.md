@@ -16,20 +16,29 @@ clone this repo, cd into the folder, type `$ npm install`
 
 5. __configure__ modify the config/development.js
 
-##Run
+##Start
 
 `$ node app.js`
-
-
-##Controllers
 ##Models
+###Scaffolding
+Generate Models easily with the generator.js . This would generate a model named "post" with attributes title, content and author and title would be required field.
+
+`$ node generate.js model post title:required content author`
+
+Find out more options via `$ node generate.js`
 ###Defaults
 ###Validation
 ###Views
-###Before and After
 ###Working with Models
 ####get
 ####set
 ####save
+##Controllers
+###Scaffolding
+Generate Controllers easily with the generator.js . This would generate a controller namend "posts" with methods index, edit and delete.
 
+`$ node generate.js controller posts index edit delete`
 
+Find out more options via `$ node generate.js`
+##Views
+##Routes
