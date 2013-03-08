@@ -215,5 +215,4 @@ Unbuffered code for conditionals etc <% code %>
 Escapes html by default with <%= code %>
 Unescaped buffering with <%- code %>
 
-Documentation can be found here: https://github.com/visionmedia/ejs and here: https://github.com/RandomEtc/ejs-locals
-
+Documentation can be found here: https://github.com/visionmedia/ejs and here: https://github.com/publicclass/express-partials
