@@ -27,9 +27,6 @@
     "imagemagick": "~0.1.3",
     "mime": "~1.2.9"
   },
-  "devDependencies": {
-    "jake": "latest"
-  },
   "engines": {
     "node": ">=0.8"
   }
