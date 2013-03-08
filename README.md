@@ -117,7 +117,7 @@ user.save({
 	}
 });
 ```
-__Note__ Only valid models will be saved to database. You should call **model.isValid()** before to check that.
+__Note__: Only valid models will be saved to database. You should call **model.isValid()** before to check that.
 ####Model.isValid()
 To check if a model is valid:
 ```js
@@ -160,6 +160,50 @@ Redirects the Request to **path**
 ###this.currentUser
 If the user has a valid session eg he is logged in the **this.currentUser** will contain the current user object.
 
-
-##Views
 ##Routes
+The routes file in the config directory contains all the individual routes to the controllers. A route consists of a **key** and a **value**.
+The **key** is the string we pass as "path" variable to express the path can also contain dynamic parts - read more about more here http://expressjs.com/api.html#app.VERB .
+
+The **value** is either a object or an array of objects if the path should match different http methods. 
+
+###Example:
+```js		
+"user/:id" : { 	
+	//routes to the controller named 'User' and the method named 'set'
+	to : 'User.set',
+	
+	//the http method the route should match. can be either get, post, put or delete
+	via : 'post',
+
+	//set false if the request dont have to be authorized
+	authorized : false
+}
+```
+You can even match two routes to the same path but with different http methods like so:
+```js
+'user/register' : [{
+	to : 'Users.registerForm',
+	via : 'get',
+},
+{
+	to : 'Users.register',
+	via : 'post',
+
+}]
+```
+
+__Note:__ Each route will be checked while booting Yolo if the **to** parameters matches a controller.
+
+##Templates
+We use the ejs Template Engine extend with ejs-locals. Ejs lets you write javascript code into Templates like so:
+```js
+<% if (currentUser) { %>
+    <h2><%= currentUser.get("name") %></h2>
+<% } %>
+```
+Unbuffered code for conditionals etc <% code %>
+Escapes html by default with <%= code %>
+Unescaped buffering with <%- code %>
+
+Documentation can be found here: https://github.com/visionmedia/ejs and here: https://github.com/RandomEtc/ejs-locals
+
