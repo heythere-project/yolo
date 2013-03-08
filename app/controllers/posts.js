@@ -1,1 +1,0 @@
-module.exports = Yolo.Controller.extend({});

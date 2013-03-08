@@ -35,9 +35,9 @@ Find out more options via `$ node generate.js`
 ####save
 ##Controllers
 ###Scaffolding
-Generate Controllers easily with the generator.js . This would generate a controller namend "posts" with methods index, edit and delete.
+Generate Controllers easily with the generator.js . This would generate a controller namend "posts" with methods index, edit and delete. Method "edit" will be acessabble via 'POST' and "delete" via 'DELETE'. Routes to those methods will be added automatically.
 
-`$ node generate.js controller posts index edit delete`
+`$ node generate.js controller posts index edit:post delete:delete`
 
 Find out more options via `$ node generate.js`
 ##Views
