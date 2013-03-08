@@ -3,6 +3,7 @@ var gaze = require('gaze'),
     startup = require('./startup'),
     liveReload;
 
+
 liveReload  = {
   bind : function(){
     this.gaze = gaze(Yolo.config.liveReload);
@@ -37,36 +38,41 @@ liveReload  = {
   handlers : {
      model : {
         added : function(file, name){
-          Yolo.logger.info("∞ Added Model '" + name + "'");
+          Yolo.logger.info("Added Model '" + name + "'");
           Yolo.models[name] = startup.initializeModel(APP + 'models/', name);
         },
 
         changed : function(file, name){
-          Yolo.logger.info("∞ Reloaded Model '" + name + "'");
+          Yolo.logger.info("Reloaded Model '" + name + "'");
+         
           delete Yolo.models[name];
+          delete require.cache[APP + "models/" + name + '.js'];
+
           Yolo.models[name] = startup.initializeModel(APP + 'models/', name);
         },
 
         deleted : function(file, name){
-          Yolo.logger.info("∞ Deleted Model '" + name + "'");
+          Yolo.logger.info("Deleted Model '" + name + "'");
           delete Yolo.models[name];
         }
       },
 
       controller : {
         added : function(file, name){
-          Yolo.logger.info("∞ Added Controller '" + name + "'");
+          Yolo.logger.info("Added Controller '" + name + "'");
           Yolo.controllers[name] = startup.initializeController(APP + 'controllers/', name);
         },
 
         changed : function(file, name){
-          Yolo.logger.info("∞ Reloaded Controller '" + name + "'");
+          Yolo.logger.info("Reloaded Controller '" + name + "'");
           delete Yolo.controllers[name];
+          delete require.cache[APP + "controllers/" + name + '.js'];
+
           Yolo.controllers[name] = startup.initializeController(APP + 'controllers/', name);
         },
 
         deleted : function(file, name){
-          Yolo.logger.info("∞ Deleted Controller '" + name + "'");
+          Yolo.logger.info("Deleted Controller '" + name + "'");
           delete Yolo.controllers[name];
         }
     }
@@ -75,4 +81,4 @@ liveReload  = {
 
 liveReload.bind();
 
-Yolo.logger.info("∞ Live reload for '" + Yolo.config.liveReload + "'");
+Yolo.logger.info("Live reload for '" + Yolo.config.liveReload + "'");

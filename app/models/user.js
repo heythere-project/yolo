@@ -7,7 +7,8 @@ var User = Yolo.Model.extend({
 		email : null,
 		password : null,
 		bio : null,
-		lastLogin : new Date()
+		lastLogin : new Date(),
+		friends : []
 	},
 
 	validation : {
