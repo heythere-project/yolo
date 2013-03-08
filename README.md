@@ -20,10 +20,16 @@ clone this repo, cd into the folder, type `$ npm install`
 
 `$ node app.js`
 
-####Tests
-to run the unit test install 
 
-`$ npm install nodeunit -g`.
-
+##Controllers
+##Models
+###Defaults
+###Validation
+###Views
+###Before and After
+###Working with Models
+####get
+####set
+####save
 
 
