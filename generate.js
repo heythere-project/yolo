@@ -74,7 +74,7 @@ var usage = [
 		"	},",
 		"	*/",
 
-		"};",
+		"});",
 		"",
 		"module.exports = $0;"
 	].join('\n');
@@ -233,15 +233,15 @@ if(args._[0] === "controller"){
 			}
 
 			attributeStr.push(tab2 + parts[0] + ' : null,' );
-			viewsStr.push(tab2 + tab1 + toUpperCase(name) + '.findBy' + toUpperCase(parts[0]) );
+			viewsStr.push(tab2 + tab1 + format(name) + '.findBy' + format(parts[0]) );
 		} else {
 			attributeStr.push(tab2 + attribute + ': null,');
 			validatesStr.push(tab2 + attribute + ' : { required : false },');
-			viewsStr.push(tab2 + tab1 + toUpperCase(name) + '.findBy' + toUpperCase(attribute) );
+			viewsStr.push(tab2 + tab1 + format(name) + '.findBy' + format(attribute) );
 		}
 	});
 
-	model_template = model_template.replace(/\$0/g, toUpperCase(name));
+	model_template = model_template.replace(/\$0/g, format(name));
 	model_template = model_template.replace(/\$1/g, name);
 	model_template = model_template.replace(/\$2/g, attributeStr.join('\n'));
 	model_template = model_template.replace(/\$3/g, validatesStr.join('\n'));
@@ -253,5 +253,5 @@ if(args._[0] === "controller"){
 	}
 
 	fs.writeFileSync(path + '/' + name + '.js', model_template);
-	console.log('\033[34m%s\033[39m' , "Created model '" + toUpperCase(name) + "' at " + path + '/' + name + '.js' + " ✔");
+	console.log('\033[34m%s\033[39m' , "Created model '" + format(name) + "' at " + path + '/' + name + '.js' + " ✔");
 }
