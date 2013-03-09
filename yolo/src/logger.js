@@ -102,8 +102,8 @@ Logger.prototype.error = function(a){
 };
 
 function getLogFileStream(path){
-	fs.openSync(path + '.log', 'a');
-	return fs.createWriteStream(path + '.log', {
+	fs.openSync(path + '.txt', 'a');
+	return fs.createWriteStream(path + '.txt', {
 		flags : 'a'
 	})
 }
