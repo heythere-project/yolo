@@ -109,8 +109,8 @@ function getLogFileStream(path){
 }
 
 function nowStamp(){
-	var now = new Date();
-	return [now.getDate(), now.getMonth() + 1, now.getFullYear()].join('-');
+	var n = new Date();
+	return [ n.getFullYear(), ('0'+n.getDate()).slice(-2), ('0'+(n.getMonth()+1)).slice(-2)].join('-');
 }
 
 
