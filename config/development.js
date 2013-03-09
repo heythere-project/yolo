@@ -3,7 +3,10 @@ module.exports = {
 		port : 8081,
 		respondWith : 'html',
 		statics : 'app/public/',
-		notAuthorizedRedirect : '/user/login'
+		notAuthorizedRedirect : '/user/login',
+		session : {
+			secret : 'zupfkuchen'
+		},
 	},
 
 	database : {
@@ -16,8 +19,11 @@ module.exports = {
 
 	liveReload : 'app/**/*.js',
 
-	session : {
-		secret : 'zupfkuchen'
+	logger : {
+		levels : {
+			console : 2,
+			file : 3
+		}
 	},
 
 	model : {

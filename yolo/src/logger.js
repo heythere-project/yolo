@@ -1,8 +1,9 @@
 var EventEmitter = require('events').EventEmitter,
 	inherits = require('util').inherits,
+	fs = require('fs'),
 	levels = {
-		'Info' : 1,
-		'Log' : 2,
+		'Log' : 1,
+		'Info' : 2,
 		'Warn' : 3,
 		'Error' : 4
 	},
@@ -36,20 +37,52 @@ var EventEmitter = require('events').EventEmitter,
 	};
 
 function Logger(){
+
 	EventEmitter.call(this);
-	this.level = 1;
+	
+	this.levels = {
+		console : 0,
+		file : 5
+	};
+
+	if(!fs.existsSync(CONFIG + 'logs')){
+		console.log("Created Logs Folder");
+		fs.mkdirSync(CONFIG + 'logs');
+	}
+
+	this.logFileStamp = nowStamp();
+	this.logFileStream = getLogFileStream(CONFIG + 'logs/' + this.logFileStamp );
+
 	
 	this.on('_', function(type, args){
-		if(this.level <= levels[type]){
-			console.log(stylize('[' + new Date().toUTCString() + ']', 'cyan') + stylize('['  + type+ '] ' + args, styles[type]));
+		var log = stylize('[' + new Date().toUTCString() + ']', 'cyan') + stylize('['  + type+ '] ' + args, styles[type]),
+			logUnstyled = '[' + new Date().toUTCString() + ']' + '['  + type+ '] ' + args;
+
+
+		if(this.levels.console <= levels[type]){
+			console.log(log);
 			this.emit(type, args);
 		}
+
+		//move this in own appender
+		if(this.levels.file <= levels[type]){
+			if(this.logFileStamp != nowStamp()){				
+				this.logFileStream.end();
+				this.logFileStream.destroySoon();
+
+				this.logFileStamp = nowStamp();
+				this.logFileStream = getLogFileStream(CONFIG + 'logs/' + this.logFileStamp );
+			}
+
+			this.logFileStream.write(logUnstyled + '\n');
+		}
+
 	}, this);
 };
 
+
+
 inherits(Logger, EventEmitter);
-
-
 
 //public
 Logger.prototype.log = function(a){
@@ -60,14 +93,25 @@ Logger.prototype.info = function(a){
 	this.emit('_', 'Info', a);
 };
 
-
 Logger.prototype.warn = function(a){
 	this.emit('_', 'Warn', a);
 };
 
-
 Logger.prototype.error = function(a){
 	this.emit('_' ,'Error', a);
 };
+
+function getLogFileStream(path){
+	fs.openSync(path + '.log', 'a');
+	return fs.createWriteStream(path + '.log', {
+		flags : 'a'
+	})
+}
+
+function nowStamp(){
+	var now = new Date();
+	return [now.getDate(), now.getMonth() + 1, now.getFullYear()].join('-');
+}
+
 
 module.exports = Logger;

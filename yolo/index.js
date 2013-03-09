@@ -31,13 +31,16 @@ YoloApp.prototype.run = function(options) {
 	this.logger = new Logger();
 
 	this.logger.info('You only live once - Welcome');
-	this.logger.log('Booting ' + Yolo.environment + ' …')
+	this.logger.info('Booting ' + Yolo.environment + ' …')
 
 	//perform all checks
 	startup.performChecks();
 
 	//if all files are present we are good to go
 	this.config = require(CONFIG + Yolo.environment);
+
+	//set log level
+	this.logger.levels = this.config.logger.levels;
 
 	//etablish db connection
 	this.db = require('./src/db');

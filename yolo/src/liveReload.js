@@ -81,4 +81,4 @@ liveReload  = {
 
 liveReload.bind();
 
-Yolo.logger.info("Live reload for '" + Yolo.config.liveReload + "'");
+Yolo.logger.log("Live reload for '" + Yolo.config.liveReload + "'");

@@ -72,7 +72,7 @@ var Http = function(){
 	this.server.use(express.cookieParser()); 
 
 	//use redis session store
-	this.server.use(connect.session({ store: new RedisStore({}), secret: Yolo.config.session.secret  }));
+	this.server.use(connect.session({ store: new RedisStore({}), secret: Yolo.config.http.session.secret  }));
 
 	//.html is the default extension
 	this.server.set("view engine", "html");
