@@ -7,7 +7,7 @@ module.exports = {
 		session : {
 			secret : 'zupfkuchen'
 		},
-		logger : 'HTTP :remote-addr  ":method :url " :status :res[content-length] ":referrer" ":user-agent" :response-time ms'
+		logger : 'HTTP :remote-addr :method :url :status :res[content-length] ":referrer" ":user-agent" :response-time ms'
 	},
 
 	database : {

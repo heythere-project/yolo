@@ -1,6 +1,4 @@
-var EventEmitter = require('events').EventEmitter,
-	inherits = require('util').inherits,
-	Writable = require('stream').Writable,
+var Writable = require('stream').Writable,
 	fs = require('fs'),
 	levels = {
 		'Log' : 1,
@@ -122,6 +120,5 @@ function nowStamp(){
 	var n = new Date();
 	return [ n.getFullYear(), ('0'+n.getDate()).slice(-2), ('0'+(n.getMonth()+1)).slice(-2)].join('-');
 }
-
 
 module.exports = Logger;
