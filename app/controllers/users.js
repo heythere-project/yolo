@@ -126,7 +126,7 @@ var Users = Yolo.Controller.extend({
 		}
 
 		if(params.files.cover.size > 0){
-			wait++;
+			++wait;
 
 			var coverProcessor = new ImageProcessor({
 				image : params.files.cover.path,
@@ -151,7 +151,7 @@ var Users = Yolo.Controller.extend({
 		}
 
 		if(params.files.profile.size > 0){
-			wait++;
+			++wait;
 
 			var profileProcessor = new ImageProcessor({
 					image : params.files.profile.path,
