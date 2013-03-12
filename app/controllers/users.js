@@ -182,9 +182,7 @@ var Users = Yolo.Controller.extend({
 		}
 
 		function done(){
-			if(--wait === 0){
-				render.call(this);
-			}
+			--wait || render.call(this);
 		};
 
 		function render(){
