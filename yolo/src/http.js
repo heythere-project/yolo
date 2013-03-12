@@ -16,7 +16,7 @@ function error(status, msg) {
 }
 
 function validateConstraints(route){
-	return function(req, res, next){
+	return function validateConstraintsClosure(req, res, next){
 		if(route.authorized && !req.session.user){
 			return res.redirect(Yolo.config.http.notAuthorizedRedirect);
 		} 
@@ -27,38 +27,43 @@ function validateConstraints(route){
 function callRoute(route){
 	var fn = route.to.split('.');
 	
-	return function(req, res){
+	return function callRouteClosure(req, res){
+
 		//lockup controller by name defined into the route and initialize 
 		var controller = Yolo.controllers[fn[0]];
-		var n = new controller();
+		var instance = new controller();
 
 		//merge all into one params object
 		var params = _.extend({}, req.params, req.query, req.body, { files : req.files });
 		
 		//make these in the controller available
-		n.request = req;
-		n.response = res;
-		n.currentUser = null;
+		instance.request = req;
+		instance.response = res;
+		instance.currentUser = null;
 
 		//if the user has a session we lookup the user in the db
-		if(req.session.user){
+		if(res.session && req.session.user){
 			Yolo.models.User.findById( req.session.user.id, function(user){
 				if(user){
-					n.currentUser = user[0];
+					instance.currentUser = user[0];
 				}
-				n[fn[1]](params);
+				instance[fn[1]](params);
 			});
+			
 		} else {
 			//otherwise call directly
-			n[fn[1]](params);
+			instance[fn[1]](params);
 		}
+
+		req.on("end", function(){
+			//free memory
+			delete instance;
+		})
 	};
 };
 
 var Http = function(){
 	this.server = express();
-
-	//this.server.use(express.favicon());
 
 	//serve static files
 	if(Yolo.config.http.statics){
@@ -84,11 +89,12 @@ var Http = function(){
 	this.server.set('views', APP + '/views/');
 
 	//setup logger for all request
-	this.server.use(function(req, res, next){
-	  Yolo.logger.log(req.method + ' ' + req.url);
-	  next();
-	});
-
+	this.server.use(
+		express.logger({
+			format : Yolo.config.http.logger,
+			stream : Yolo.logger
+		})
+	);
 
 	this.server.listen(Yolo.config.http.port);
 	Yolo.logger.log("HttpServer listening :" + Yolo.config.http.port);

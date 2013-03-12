@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-process.title = "Heythere! Appserver";
+process.title = "[hey]App";
 
 var Yolo = require('./yolo'),
 	server = new Yolo();

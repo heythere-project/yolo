@@ -1,5 +1,6 @@
 var EventEmitter = require('events').EventEmitter,
 	inherits = require('util').inherits,
+	Writable = require('stream').Writable,
 	fs = require('fs'),
 	levels = {
 		'Log' : 1,
@@ -36,9 +37,11 @@ var EventEmitter = require('events').EventEmitter,
     	return '\033[' + styles[style][0] + 'm' + str + '\033[' + styles[style][1] + 'm';
 	};
 
-function Logger(){
 
-	EventEmitter.call(this);
+function Logger(){
+	Writable.call(this, {
+		decodeStrings : false
+	});
 	
 	this.levels = {
 		console : 0,
@@ -51,8 +54,7 @@ function Logger(){
 	}
 
 	this.logFileStamp = nowStamp();
-	this.logFileStream = getLogFileStream(CONFIG + 'logs/' + this.logFileStamp );
-
+	this.outStream = getLogFileStream(CONFIG + 'logs/' + this.logFileStamp );
 	
 	this.on('_', function(type, args){
 		var log = stylize('[' + new Date().toUTCString() + ']', 'cyan') + stylize('['  + type+ '] ' + args, styles[type]),
@@ -67,23 +69,31 @@ function Logger(){
 		//move this in own appender
 		if(this.levels.file <= levels[type]){
 			if(this.logFileStamp != nowStamp()){				
-				this.logFileStream.end();
-				this.logFileStream.destroySoon();
+				this.outStream.end();
+				this.outStream.destroySoon();
 
 				this.logFileStamp = nowStamp();
-				this.logFileStream = getLogFileStream(CONFIG + 'logs/' + this.logFileStamp );
+				this.outStream = getLogFileStream(CONFIG + 'logs/' + this.logFileStamp );
 			}
 
-			this.logFileStream.write(logUnstyled + '\n');
+			this.outStream.write(logUnstyled + '\n');
 		}
 
 	}, this);
 };
 
+Logger.prototype = Object.create( 
+	Writable.prototype, { 
+		constructor: { 
+			value: Logger
+		}
+	}
+);
 
-
-inherits(Logger, EventEmitter);
-
+Logger.prototype._write = function(str, encoding, cb){
+	this.emit('_', 'Info', str)
+	cb(null);
+};
 //public
 Logger.prototype.log = function(a){
 	this.emit('_', 'Log', a);

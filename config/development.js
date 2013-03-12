@@ -7,6 +7,7 @@ module.exports = {
 		session : {
 			secret : 'zupfkuchen'
 		},
+		logger : 'HTTP :remote-addr  ":method :url " :status :res[content-length] ":referrer" ":user-agent" :response-time ms'
 	},
 
 	database : {
@@ -17,11 +18,13 @@ module.exports = {
 		}*/
 	},
 
+
+	//use this only in development!
 	liveReload : 'app/**/*.js',
 
 	logger : {
 		levels : {
-			console : 2,
+			console : 0,
 			file : 3
 		}
 	},
