@@ -70,7 +70,7 @@ attributes : {
 		}
 	}
 ```
-Default values will be set if the attribute is not set with a value and validators will be checked before the model is saved to db or manual via [https://github.com/wemakeweb/heythere_appserver#isvalid](isValid).
+Default values will be set if the attribute is not set with a value and validators will be checked before the model is saved to db or manual via [.isValid()](https://github.com/wemakeweb/heythere_appserver#isvalid).
 
 Full list of available validations:
 https://github.com/thedersen/backbone.validation#required
