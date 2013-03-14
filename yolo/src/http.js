@@ -42,7 +42,7 @@ function callRoute(route){
 		instance.currentUser = null;
 
 		//if the user has a session we lookup the user in the db
-		if(res.session && req.session.user){
+		if(req.session && req.session.user){
 			Yolo.models.User.findById( req.session.user.id, function(user){
 				if(user){
 					instance.currentUser = user[0];

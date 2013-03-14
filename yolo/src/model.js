@@ -1,6 +1,7 @@
 var Backbone = require('backbone'),
 	validation = require('backbone-validation'),
-	mime = require('mime');
+	mime = require('mime'),
+	util = require('util');
 
 
 
@@ -10,18 +11,49 @@ var Backbone = require('backbone'),
 
 */
 
-
 /* we use the Backbone Model as base */
-var BaseModel = Backbone.Model;
+var BaseModel = function(attributes, options){
+	var defaults;
+    var attrs = attributes || {};
+   
+    //new Model definition
+    if( Object.keys(this.attributes).length > 0 ){
+    	
+    	this.defaults = {};
+    	this.validation = {};
 
+    	//loop over attributes	
+    	for(var attr in this.attributes){
+    		//each attributes gets the specifed default value or null instead
+    		this.defaults[attr] = this.attributes[attr].default || null;
+    		delete this.attributes[attr].default;
 
-/* we add the sanitize fake validator to use the 'sanitize' attribute which should be used for models
-that should not be sanitzed before saving to db */
-_.extend(validation.validators, {
-  sanitize: function(value, attr, customValue, model) {
-  	return undefined;
-  }
- });
+    		_.each(this.attributes[attr], _.bind(function(value, key){
+    			if(key in validation.validators ){
+    				(this.validation[attr] || (this.validation[attr] = {}))[key] = value;
+    			} 
+    		}, this ));
+    	}
+
+    	this.model_attributes = this.attributes;
+    	this.attributes = {};
+    }
+
+    this.cid = _.uniqueId('c');
+    this.attributes = {};
+    if (options && options.collection) this.collection = options.collection;
+    if (options && options.parse) attrs = this.parse(attrs, options) || {};
+    if (defaults = _.result(this, 'defaults')) {
+      attrs = _.defaults({}, attrs, defaults);
+    }
+    this.set(attrs, options);
+    this.changed = {};
+    this.initialize.apply(this, arguments);
+};
+
+BaseModel.prototype = new Backbone.Model();
+BaseModel.extend = Backbone.Model.extend;
+
 
 
 /* extend it with Backbone validations https://github.com/thedersen/backbone.validation#using-server-validation */
@@ -137,7 +169,7 @@ _.extend( BaseModel.prototype, {
 
       	//sanitze all strings
       	_.each(this.defaults, function(value, key){
-      		if(this.validation[key] && ( ! ("sanitize" in this.validation[key]) || this.validation[key].sanitize === true) ){
+      		if(this.validation[key] && ( ! ("sanitize" in this.model_attributes[key]) || this.model_attributes[key].sanitize === true) ){
       			this.attributes[key] = _.escape(this.attributes[key]);
       		}
       	}, this);

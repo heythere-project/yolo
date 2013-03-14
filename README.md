@@ -40,23 +40,38 @@ Find out more options via
 ```bash 
 $ node generate.js
 ```
-###Defaults
-Define Defaults for each attribute you will add to the later. Defaults can be anything like Strings, Numbers or Objects. If the attribute wont be overwritten, the default value will be used instead. 
+###Attributes
+You can define attributes for each model with default values and validation rules:
 ```js
-defaults : {
-	content : null,
-	title : null
-}
+attributes : {
+		firstName : {
+			required : true
+		},
+		lastName : {
+			required : true,
+		},
+		email : {
+			pattern : 'email',
+		},
+		password : {
+			required : true,
+			minLength : 5,
+			sanitize : false
+		},
+		bio : {
+			required : false,
+			maxLength : 180
+		},
+		lastLogin : {
+			"default" : new Date()
+		},
+		friends : {
+			"default" : [],
+		}
+	}
 ```
-###Validation
-You can define validation rules for each attribute. We save only valid models to database.
-```js
-validation : {
-	firstName : { required : true },
-	bio : { required: false, maxLength : 180 },
-	email : { pattern: 'email' }
-},
-```
+Default values will be set if the attribute is not set with a value and validators will be checked before the model is saved to db or manual via [https://github.com/wemakeweb/heythere_appserver#isvalid](isValid).
+
 Full list of available validations:
 https://github.com/thedersen/backbone.validation#required
 

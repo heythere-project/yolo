@@ -30,18 +30,14 @@ var usage = [
 	model_template = [
 		"var $0 = Yolo.Model.extend({",							
 		"	model_name : '$1',", 														
-		"",																	
-		"	defaults : {", 															
-		"$2",																	
-		"	},", 
-		"",
+		"",	
 		"	/*",
 		"		You can use various validations for attributes.",
 		"		See the list of them at: https://github.com/wemakeweb/heythere_appserver#validation",
-		"	*/",
-		"	validation : { ",
-		"$3",
-		"	},",
+		"	*/",																
+		"	attributes: {", 															
+		"$2",																	
+		"	},", 
 		"",
 		"	/*",
 		"		We will autogenerate the following views for each default attribute directly, so you dont ",
@@ -229,14 +225,18 @@ if(args._[0] === "controller"){
 			var parts = attribute.split(':');
 
 			if(parts[1] === "required"){
-				validatesStr.push(tab2 + parts[0] + ' : { required : true },');
+				attributeStr.push(tab2 + parts[0] + ' : {' );
+				attributeStr.push(tab2 + tab1 + '"default" : null,');
+				attributeStr.push(tab2 + tab1 + 'required : true');
+				attributeStr.push(tab2  + '},')
 			}
 
-			attributeStr.push(tab2 + parts[0] + ' : null,' );
 			viewsStr.push(tab2 + tab1 + format(name) + '.findBy' + format(parts[0]) );
 		} else {
-			attributeStr.push(tab2 + attribute + ': null,');
-			validatesStr.push(tab2 + attribute + ' : { required : false },');
+			attributeStr.push(tab2 + attribute + ' : {' );
+			attributeStr.push(tab2 + tab1 + '"default" : null,');
+			attributeStr.push(tab2 + tab1 + 'required : false');
+			attributeStr.push(tab2  + '},')
 			viewsStr.push(tab2 + tab1 + format(name) + '.findBy' + format(attribute) );
 		}
 	});
@@ -244,7 +244,6 @@ if(args._[0] === "controller"){
 	model_template = model_template.replace(/\$0/g, format(name));
 	model_template = model_template.replace(/\$1/g, name);
 	model_template = model_template.replace(/\$2/g, attributeStr.join('\n'));
-	model_template = model_template.replace(/\$3/g, validatesStr.join('\n'));
 	model_template = model_template.replace(/\$4/g, viewsStr.join('\n'));
 
 	if(args.clean){
