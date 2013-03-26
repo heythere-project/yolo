@@ -8,3 +8,5 @@ server.run({
 	app : 'app/',
 	config : 'config/'
 });
+
+console.log("Running!");
