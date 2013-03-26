@@ -9,4 +9,4 @@ server.run({
 	config : 'config/'
 });
 
-console.log("Hallo Fabi!");
+console.log("Gruss an Andi");
