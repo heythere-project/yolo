@@ -26,7 +26,7 @@ Require yolo where ever you want and pass the those folders to the *run* method 
 
 ##Start
 ```js
-var Yolo = require('./yolo'),
+var Yolo = require('yolo-server'),
 	server = new Yolo();
 
 server.run({
