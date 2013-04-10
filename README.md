@@ -6,10 +6,24 @@ Yolo is MVC WebFramework written in Nodejs heavily inspired by ruby on rails. It
 __Yolo requires nodejs, couchdb and redis to run__
 ```sh
 $ npm install yolo
-$ npm install yolo-cli -g
 ```
-##Start
 
+#Scaffolding 
+Scaffolding for app structure, models and controllers is available via the [yolo-cli](https://github.com/heythere-project/yolo-cli).
+
+Your app needs a special structure in order to get yolo running for you:
+```
+app/
+	models/
+	controllers/
+	views/
+	public/
+config/
+server.js
+```
+The paths for these folders are passed to the 'run' method.
+
+##Start
 ```js
 var Yolo = require('./yolo'),
 	server = new Yolo();
@@ -18,10 +32,9 @@ server.run({
 	app : 'app/',
 	config : 'config/'
 });
+
 ```
-
-
-##Models
+#Models
 Yolo.Model is basiclly a Backbone.Model extended with validation and a couchdb layer. Models go into `app/models` and are loaded automaticlly if Yolo boots. 
 You define a model by extending the Yolo.Model:
 ```js
@@ -29,17 +42,7 @@ module.exports = Yolo.Model.extend({
 	//…
 });
 ```
-###Scaffolding
-Generate Models easily with the generator.js . This would generate a model named "post" with attributes title, content and author and title would be required field.
 
-```bash
-$ node generate.js model post title:required content author
-```
-
-Find out more options via 
-```bash 
-$ node generate.js
-```
 ###Attributes
 You can define attributes for each model with default values and validation rules:
 ```js
@@ -152,18 +155,6 @@ user.attachments('profile').url
 
 ##Controllers
 Controllers take the main part in handling incoming requests and processing them.
-###Scaffolding
-Generate Controllers easily with the generator.js . This would generate a controller namend "posts" with methods index, edit and delete. Method "edit" will be acessabble via 'POST' and "delete" via 'DELETE'. Routes to those methods will be added automatically.
-
-```bash
-$ node generate.js controller posts index edit:post delete:delete
-```
-
-Find out more options via 
-```bash
-$ node generate.js
-```
-
 
 A controller consists of a group of methods which handle one type of request defined in the **route**. Example:
 ```js
