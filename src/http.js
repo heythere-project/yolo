@@ -1,4 +1,4 @@
-var express = require('express'),
+var 	express = require('express'),
 	connect = require('connect'),
 	engine = require('ejs-locals'),
 	RedisStore = require('connect-redis')(express),
@@ -39,21 +39,8 @@ function callRoute(route){
 		//make these in the controller available
 		instance.request = req;
 		instance.response = res;
-		instance.currentUser = null;
-
-		//if the user has a session we lookup the user in the db
-		if(req.session && req.session.user){
-			Yolo.models.User.findById( req.session.user.id, function(user){
-				if(user){
-					instance.currentUser = user[0];
-				}
-				instance[fn[1]](params);
-			});
-			
-		} else {
-			//otherwise call directly
-			instance[fn[1]](params);
-		}
+		
+		instance[fn[1]](params);
 
 		req.on("end", function(){
 			//free memory
