@@ -3,8 +3,8 @@ var flags = require('optimist').argv,
 	startup = require('./src/startup'),
 	redis = require("redis");
 
-//make underscore global
-_ = require('underscore');
+	//make underscore global
+	_ = require('underscore');
 
 function YoloApp(){};
 
@@ -13,7 +13,6 @@ function YoloApp(){};
 	follow the function calls if you want to know 
 	who yolo works…
 */
-
 YoloApp.prototype.run = function(options) {
 	//global constants
 	PATH = __dirname.replace('/yolo', '/') 
@@ -77,5 +76,4 @@ YoloApp.prototype.run = function(options) {
 	this.logger.info("Ready!");
 };
        
-
 module.exports = YoloApp;

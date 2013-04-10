@@ -1,11 +1,11 @@
 {
-  "name": "appserver",
+  "name": "yolo",
   "version": "0.0.1",
-  "author": "Sebastian <sotto@heythere.de>",
-  "description": "Heythere Appserver",
+  "author": "Sebastian <sebastian@heythere.de>",
+  "description": "Webframework that powers yolo",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zentur/heythere_appserver.git"
+    "url": "https://github.com/heythere-project/yolo.git"
   },
   "dependencies": {
     "underscore": "*",
@@ -16,7 +16,6 @@
     "optimist": "*",
     "backbone": "*",
     "backbone-validation": "*",
-    "bcrypt": "*",
     "ejs": "*",
     "consolidate": "*",
     "ejs-locals": "~1.0.2",
@@ -24,7 +23,6 @@
     "connect-redis": "~1.4.5",
     "cradle": "~0.6.4",
     "gaze": "~0.3.3",
-    "imagemagick": "~0.1.3",
     "mime": "~1.2.9"
   },
   "engines": {
