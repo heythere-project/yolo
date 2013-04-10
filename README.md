@@ -1,7 +1,6 @@
 #Yolo
 Yolo is MVC WebFramework written in Nodejs heavily inspired by ruby on rails. It powers our Heythere servers. 
 
-
 ##Install
 __Yolo requires nodejs, couchdb and redis to run__
 ```sh
@@ -19,9 +18,11 @@ app/
 	views/
 	public/
 config/
-server.js
+	production.js
+	development.js
+	routes.js
 ```
-The paths for these folders are passed to the 'run' method.
+Require yolo where ever you want and pass the those folders to the *run* method like so: 
 
 ##Start
 ```js
@@ -34,8 +35,11 @@ server.run({
 });
 
 ```
+After calling *run* Yolo will boot up and look up all [models](https://github.com/heythere-project/yolo#models) files in /app/models and all [controllers](https://github.com/heythere-project/yolo#controllers) in /app/controllers. It will bind all [routes](https://github.com/heythere-project/yolo#routes) configured in the /config/routes.js file for you. 
+
 #Models
-Yolo.Model is basiclly a Backbone.Model extended with validation and a couchdb layer. Models go into `app/models` and are loaded automaticlly if Yolo boots. 
+Yolo.Model is basiclly a Backbone.Model extended with validation and a couchdb layer. Models go into `app/models` and are loaded automaticlly if Yolo boots. *Note* for now we only support couchdb as database.
+
 You define a model by extending the Yolo.Model:
 ```js
 module.exports = Yolo.Model.extend({ 		
