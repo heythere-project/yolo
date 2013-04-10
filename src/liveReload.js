@@ -1,11 +1,12 @@
 var gaze = require('gaze'),
     path = require('path'),
     startup = require('./startup'),
+    _ = require('underscore'),
     liveReload;
 
 
 liveReload  = {
-  bind : function(){
+  bind : function(Yolo){
     this.gaze = gaze(Yolo.config.liveReload);
     this.gaze.on('changed', _.bind(function(file){  this.event('changed', file) }, this));
     this.gaze.on('added', _.bind(function(file){  this.event('added', file) }, this));
@@ -39,7 +40,7 @@ liveReload  = {
      model : {
         added : function(file, name){
           Yolo.logger.info("Added Model '" + name + "'");
-          Yolo.models[name] = startup.initializeModel(APP + 'models/', name);
+          Yolo.models[name] = startup.initializeModel(Yolo.APP + 'models/', name);
         },
 
         changed : function(file, name){
@@ -48,7 +49,7 @@ liveReload  = {
           delete Yolo.models[name];
           delete require.cache[APP + "models/" + name + '.js'];
 
-          Yolo.models[name] = startup.initializeModel(APP + 'models/', name);
+          Yolo.models[name] = startup.initializeModel(Yolo.APP + 'models/', name);
         },
 
         deleted : function(file, name){
@@ -60,7 +61,7 @@ liveReload  = {
       controller : {
         added : function(file, name){
           Yolo.logger.info("Added Controller '" + name + "'");
-          Yolo.controllers[name] = startup.initializeController(APP + 'controllers/', name);
+          Yolo.controllers[name] = startup.initializeController(Yolo.APP + 'controllers/', name);
         },
 
         changed : function(file, name){
@@ -68,7 +69,7 @@ liveReload  = {
           delete Yolo.controllers[name];
           delete require.cache[APP + "controllers/" + name + '.js'];
 
-          Yolo.controllers[name] = startup.initializeController(APP + 'controllers/', name);
+          Yolo.controllers[name] = startup.initializeController(Yolo.APP + 'controllers/', name);
         },
 
         deleted : function(file, name){
@@ -79,6 +80,6 @@ liveReload  = {
   }
 };
 
-liveReload.bind();
+exports.bind = liveReload.bind;
 
 Yolo.logger.log("Live reload for '" + Yolo.config.liveReload + "'");

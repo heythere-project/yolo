@@ -1,7 +1,7 @@
 {
   "name": "yolo-server",
-  "version": "0.0.3",
-  "author": "Sebastian <sebastian@heythere.de>",
+  "version": "0.0.4",
+  "author": "Sebastian Otto <sebastian@heythere.de>",
   "description": "Webframework that powers Heythere",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "ejs": "*",
     "consolidate": "*",
     "ejs-locals": "~1.0.2",
-    "express-partials": "0.0.6",
+    "express-partials": "*",
     "connect-redis": "~1.4.5",
     "cradle": "~0.6.4",
     "gaze": "~0.3.3",
@@ -34,7 +34,9 @@
     "doc": "doc",
     "test": "test"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "yolo-cli" : "*"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

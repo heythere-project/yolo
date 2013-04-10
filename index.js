@@ -16,7 +16,7 @@ YoloApp.prototype.run = function(options) {
 	//global Yolo
 	Yolo = this;
 
-	this.PATH = path.resolve(__dirname, '../') + "/";
+	this.PATH = path.resolve(__dirname, '../../') + "/";
 	
 	this.APP = this.PATH + options.app;
 	this.CONFIG = this.PATH + options.config;
@@ -68,7 +68,7 @@ YoloApp.prototype.run = function(options) {
 	this.httpServer.bind(this.routes);
 
 	if(this.config.liveReload){
-		require('./src/liveReload');
+		require('./src/liveReload').bind(this);
 	}
 
 	//start socket
