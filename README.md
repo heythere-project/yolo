@@ -22,7 +22,7 @@ config/
 	development.js
 	routes.js
 ```
-Require yolo where ever you want and pass the those folders to the *run* method like so: 
+Require yolo where ever you want and pass those folders to the *run* method like so: 
 
 ##Start
 ```js
