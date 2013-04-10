@@ -164,7 +164,7 @@ A controller consists of a group of methods which handle one type of request def
 ```js
 module.exports = Yolo.Controller.extend({
 	index : function(params){
-		this.renderHTML("dashboard/index", {user : this.currentUser });
+		this.renderHTML("dashboard/index", {user : user });
 	}
 });
 ```
@@ -177,8 +177,7 @@ Returns a JSON Object containing the options.
 
 ###this.redirect(path)
 Redirects the Request to **path**
-###this.currentUser
-If the user has a valid session eg he is logged in the **this.currentUser** will contain the current user object.
+
 
 ##Routes
 The routes file in the config directory contains all the individual routes to the controllers. A route consists of a **key** and a **value**.
