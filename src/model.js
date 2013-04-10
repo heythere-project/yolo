@@ -1,7 +1,8 @@
 var Backbone = require('backbone'),
 	validation = require('backbone-validation'),
 	mime = require('mime'),
-	util = require('util');
+	util = require('util'),
+	_ = require('underscore');
 
 
 

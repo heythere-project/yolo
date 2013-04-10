@@ -36,7 +36,7 @@ var Writable = require('stream').Writable,
 	};
 
 
-function Logger(){
+function Logger( Yolo ){
 	Writable.call(this, {
 		decodeStrings : false
 	});
@@ -46,13 +46,13 @@ function Logger(){
 		file : 5
 	};
 
-	if(!fs.existsSync(CONFIG + 'logs')){
+	if(!fs.existsSync(Yolo.CONFIG + 'logs')){
 		console.log("Created Logs Folder");
-		fs.mkdirSync(CONFIG + 'logs');
+		fs.mkdirSync(Yolo.CONFIG + 'logs');
 	}
 
 	this.logFileStamp = nowStamp();
-	this.outStream = getLogFileStream(CONFIG + 'logs/' + this.logFileStamp );
+	this.outStream = getLogFileStream(Yolo.CONFIG + 'logs/' + this.logFileStamp );
 	
 	this.on('_', function(type, args){
 		var log = stylize('[' + new Date().toUTCString() + ']', 'cyan') + stylize('['  + type+ '] ' + args, styles[type]),
@@ -71,7 +71,7 @@ function Logger(){
 				this.outStream.destroySoon();
 
 				this.logFileStamp = nowStamp();
-				this.outStream = getLogFileStream(CONFIG + 'logs/' + this.logFileStamp );
+				this.outStream = getLogFileStream(Yolo.CONFIG + 'logs/' + this.logFileStamp );
 			}
 
 			this.outStream.write(logUnstyled + '\n');

@@ -1,4 +1,5 @@
 var fs = require('fs'),
+	_ = require('underscore'),
 	formatName = function(str){
 		return str.charAt(0).toUpperCase() + str.slice(1).replace('.js', '');
 	},
@@ -8,13 +9,13 @@ var fs = require('fs'),
 	};
 
 module.exports = {
-	performChecks : function(){
+	performChecks : function(Yolo){
 		//list of all files to check before start
 		var	checks = {
-				"Config File" : CONFIG + Yolo.environment + '.js',
-				"Model dir" : APP + 'models',
-				"Controller dir" : APP + 'controllers/',
-				"Route File" : CONFIG + 'routes.js'
+				"Config File" : Yolo.CONFIG + Yolo.environment + '.js',
+				"Model dir" : Yolo.APP + 'models',
+				"Controller dir" : Yolo.APP + 'controllers/',
+				"Route File" : Yolo.CONFIG + 'routes.js'
 			};
 
 		for( var check in checks ){
@@ -25,8 +26,8 @@ module.exports = {
 		}
 	},
 
-	loadModels : function(){
-		var path = APP + 'models/',
+	loadModels : function(Yolo){
+		var path = Yolo.APP + 'models/',
 			models = fs.readdirSync(path),
 			self = this,
 			l = {};
@@ -37,7 +38,7 @@ module.exports = {
 			}
 
 			var name = formatName(model);
-			model = self.initializeModel(path, model, name);
+			model = self.initializeModel(Yolo, path, model, name);
 
 			/* we added only succesfully intialized models */
 			if(model){
@@ -52,7 +53,7 @@ module.exports = {
 		this active record like stuff should move into a more
 		model related file	
 	*/
-	initializeModel : function(path, model, name){
+	initializeModel : function(Yolo, path, model, name){
 		var	Model = require(path + model),
 			model_instance = new Model(),
 			model_proto = Model.prototype,
@@ -134,8 +135,8 @@ module.exports = {
 		return Model;
 	},
 
-	loadControllers : function(){
-		var path = APP + 'controllers/',
+	loadControllers : function(Yolo){
+		var path = Yolo.APP + 'controllers/',
 			controllers = fs.readdirSync(path),
 			self = this,
 			l = {};
@@ -146,7 +147,7 @@ module.exports = {
 			}
 
 			var name = formatName(controller);
-			controller = self.initializeController(path , controller);
+			controller = self.initializeController(Yolo, path , controller);
 			
 			/* we added only succesfully intialized controllers */
 			if(controller){
@@ -158,7 +159,7 @@ module.exports = {
 		return l;
 	},
 
-	initializeController : function(path, controller){
+	initializeController : function(Yolo, path, controller){
 		var Controller = require(path + controller),
 			controller_instance = new Controller();
 
@@ -172,8 +173,8 @@ module.exports = {
 		return Controller;
 	},
 
-	loadRoutes : function(){
-		var routes = require(CONFIG + 'routes.js'),
+	loadRoutes : function(Yolo){
+		var routes = require(Yolo.CONFIG + 'routes.js'),
 			l = {};
 
 		// we check each routes if its matches to a controller and a function

@@ -4,12 +4,14 @@ var cradle = require('cradle'),
   		raw: false
 	};
 
+
+exports.initialize = function(Yolo){
 	if(Yolo.config.database.auth){
 		options.auth = Yolo.config.database.auth;
 	}
 
-var connection = new(cradle.Connection)('localhost', 5984, options),
-	db = connection.database(Yolo.config.database.name);
+	var connection = new(cradle.Connection)('localhost', 5984, options),
+		db = connection.database(Yolo.config.database.name);
 
 	db.exists(function(err, exists){
 		if(err && err.code === 'ECONNREFUSED'){
@@ -25,6 +27,6 @@ var connection = new(cradle.Connection)('localhost', 5984, options),
 			db.create();
 		} 
 	})
-
-module.exports = db;
-
+	
+	return db;
+};

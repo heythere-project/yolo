@@ -1,8 +1,8 @@
 {
   "name": "yolo-server",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "author": "Sebastian <sebastian@heythere.de>",
-  "description": "Webframework that powers yolo",
+  "description": "Webframework that powers Heythere",
   "repository": {
     "type": "git",
     "url": "https://github.com/heythere-project/yolo.git"
@@ -12,7 +12,6 @@
     "hiredis": "*",
     "redis": "*",
     "express": "*",
-    "connect": "*",
     "optimist": "*",
     "backbone": "*",
     "backbone-validation": "*",
@@ -27,5 +26,24 @@
   },
   "engines": {
     "node": ">=0.8"
-  }
+  },
+  "readmeFilename": "README.md",
+  "gitHead": "9b083d91a470a31c83642b43985f26a29c57b131",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web",
+    "framework",
+    "REST",
+    "MVC",
+    "couchdb"
+  ],
+  "license": "BSD"
 }

@@ -1,12 +1,12 @@
 var fs = require('fs');
 
 module.exports = {
-	checks : function(){
+	checks : function(Yolo){
 		//list of all files to check before start
 		var	checks = {
-				"Config File" : CONFIG + Yolo.environment + '.js',
-				"Model dir" : APP + 'models',
-				"COntroller dir" : APP + 'controllers/'
+				"Config File" : Yolo.CONFIG + Yolo.environment + '.js',
+				"Model dir" : Yolo.APP + 'models',
+				"COntroller dir" : Yolo.APP + 'controllers/'
 			};
 
 		for( var check in checks ){

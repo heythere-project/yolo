@@ -62,12 +62,12 @@ function callRoute(route){
 	};
 };
 
-var Http = function(){
+var Http = function(Yolo){
 	this.server = express();
 
 	//serve static files
 	if(Yolo.config.http.statics){
-		this.server.use(express.static(PATH + Yolo.config.http.statics));
+		this.server.use(express.static(Yolo.PATH + Yolo.config.http.statics));
 	}
 
 	//parse the request body eg post requests
@@ -86,7 +86,7 @@ var Http = function(){
 	this.server.engine('html', engine);
 
 	//set the views directory
-	this.server.set('views', APP + '/views/');
+	this.server.set('views', Yolo.APP + '/views/');
 
 	//setup logger for all request
 	this.server.use(
@@ -131,6 +131,6 @@ Http.prototype.routeMismatch = function(){
 	});
 };
 
-module.exports = function(){
-	return new Http();	
+module.exports = function(Yolo){
+	return new Http(Yolo);	
 };
