@@ -1,5 +1,5 @@
 {
-  "name": "yolo",
+  "name": "yolo-server",
   "version": "0.0.1",
   "author": "Sebastian <sebastian@heythere.de>",
   "description": "Webframework that powers yolo",

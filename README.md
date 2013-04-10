@@ -5,7 +5,7 @@ Yolo is MVC WebFramework written in Nodejs heavily inspired by ruby on rails. It
 ##Install
 __Yolo requires nodejs, couchdb and redis to run__
 ```sh
-$ npm install yolo
+$ npm install yolo-server
 ```
 
 #Scaffolding 
