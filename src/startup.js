@@ -38,7 +38,7 @@ module.exports = {
 			}
 
 			var name = formatName(model);
-			model = self.initializeModel(Yolo, path, model, name);
+			model = self.initializeModel( path, model, name);
 
 			/* we added only succesfully intialized models */
 			if(model){
@@ -53,7 +53,7 @@ module.exports = {
 		this active record like stuff should move into a more
 		model related file	
 	*/
-	initializeModel : function(Yolo, path, model, name){
+	initializeModel : function( path, model, name){
 		var	Model = require(path + model),
 			model_instance = new Model(),
 			model_proto = Model.prototype,
@@ -147,7 +147,7 @@ module.exports = {
 			}
 
 			var name = formatName(controller);
-			controller = self.initializeController(Yolo, path , controller);
+			controller = self.initializeController( path , controller);
 			
 			/* we added only succesfully intialized controllers */
 			if(controller){
@@ -159,7 +159,7 @@ module.exports = {
 		return l;
 	},
 
-	initializeController : function(Yolo, path, controller){
+	initializeController : function( path, controller){
 		var Controller = require(path + controller),
 			controller_instance = new Controller();
 
@@ -173,7 +173,7 @@ module.exports = {
 		return Controller;
 	},
 
-	loadRoutes : function(Yolo){
+	loadRoutes : function(){
 		var routes = require(Yolo.CONFIG + 'routes.js'),
 			l = {};
 
@@ -217,4 +217,3 @@ module.exports = {
 		return l;
 	},
 }
-

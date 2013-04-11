@@ -47,7 +47,7 @@ liveReload  = {
           Yolo.logger.info("Reloaded Model '" + name + "'");
          
           delete Yolo.models[name];
-          delete require.cache[APP + "models/" + name + '.js'];
+          delete require.cache[Yolo.APP + "models/" + name + '.js'];
 
           Yolo.models[name] = startup.initializeModel(Yolo.APP + 'models/', name);
         },
@@ -67,7 +67,7 @@ liveReload  = {
         changed : function(file, name){
           Yolo.logger.info("Reloaded Controller '" + name + "'");
           delete Yolo.controllers[name];
-          delete require.cache[APP + "controllers/" + name + '.js'];
+          delete require.cache[Yolo.APP + "controllers/" + name + '.js'];
 
           Yolo.controllers[name] = startup.initializeController(Yolo.APP + 'controllers/', name);
         },
@@ -80,6 +80,6 @@ liveReload  = {
   }
 };
 
-exports.bind = liveReload.bind;
+module.exports = liveReload;
 
 Yolo.logger.log("Live reload for '" + Yolo.config.liveReload + "'");
