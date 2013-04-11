@@ -36,6 +36,7 @@ server.run({
 
 ```
 After calling *run* Yolo will boot up and look up all [models](https://github.com/heythere-project/yolo#models) files in /app/models and all [controllers](https://github.com/heythere-project/yolo#controllers) in /app/controllers. It will bind all [routes](https://github.com/heythere-project/yolo#routes) configured in the /config/routes.js file for you. 
+__Be Aware__ that Yolo can be used in libary fashion but its a framework and it will register a global variable named "Yolo".
 
 #Models
 Yolo.Model is basiclly a Backbone.Model extended with validation and a couchdb layer. Models go into `app/models` and are loaded automaticlly if Yolo boots. *Note* for now we only support couchdb as database.
