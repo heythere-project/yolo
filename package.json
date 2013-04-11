@@ -1,6 +1,6 @@
 {
   "name": "yolo-server",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Sebastian Otto <sebastian@heythere.de>",
   "description": "Webframework that powers Heythere",
   "repository": {
@@ -35,7 +35,7 @@
     "test": "test"
   },
   "devDependencies": {
-    "yolo-cli" : "*"
+    "yolo-cli": "*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
