@@ -29,10 +29,6 @@ var BaseModel = function(attributes, options){
 
     	//loop over attributes	
     	for(var attr in this.attributes){
-    		if(this.attributes.hasOwnProperty(attr)){
-    			continue;
-    		}
-
     		//each attributes gets the specifed default value or null instead
     		this.defaults[attr] = this.attributes[attr].default || null;
     		delete this.attributes[attr].default;
@@ -251,7 +247,7 @@ _.extend( BaseModel.prototype, {
 	    };
 
 	    if(method === "create"){
-	    	log = "Creating <" + hash.type + ' # >' + log; 
+	    	log = "Creating <" + hash.type + '>' + log; 
 	    	Yolo.db.save(hash, function(err, result){
 	    		if(err) return options.error(err);
 	    		options.success(result);

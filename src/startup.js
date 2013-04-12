@@ -1,5 +1,7 @@
 var fs = require('fs'),
 	_ = require('underscore'),
+	Backbone = require('backbone'),
+	Collection = require('backbone').Collection,
 	formatName = function(str){
 		return str.charAt(0).toUpperCase() + str.slice(1).replace('.js', '');
 	},
@@ -104,7 +106,7 @@ module.exports = {
 
 				//call the view
 				Yolo.db.view(model_proto.model_name + '/' + viewName, options || {}, function(err, result){
-					var res = [];
+					var res =  new Collection();
 					
 					if(err){
 						//handle error
@@ -120,11 +122,12 @@ module.exports = {
 							//type is only for db storing and referncing back to the model
 							delete item.value.type;
 							//push the created model to the result
-							res.push( new Model(item.value) );
+							res.add( new Model(item.value) );
 						}
-					}
 
-					cb.call(ctx || this, res);
+					}
+					
+					cb.call(ctx || this, res );
 				});
 			};
 		});
