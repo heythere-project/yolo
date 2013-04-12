@@ -178,6 +178,16 @@ Returns a JSON Object containing the options.
 
 ###this.redirect(path)
 Redirects the Request to **path**
+
+###this.error(code [, message])
+returns an http error with the given **code** and optional with the **message**
+
+###this.authorize(data = {})
+authorizes/logins the request. **data** will be saved associated with the session.
+
+###this.deAuthorize(cb)
+deAuthorizes and destroys the session and deletes the associated data. **cb** gets called after the destory has finished.
+
 ###this.currentUser
 If the user has a valid session eg he is logged in the **this.currentUser** will contain the current user object.
 
