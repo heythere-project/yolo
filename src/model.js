@@ -2,8 +2,8 @@ var Backbone = require('backbone'),
 	validation = require('backbone-validation'),
 	mime = require('mime'),
 	util = require('util'),
-	_ = require('underscore');
-
+	_ = require('underscore'),
+	Params = require('./params');
 
 
 /*
@@ -16,7 +16,11 @@ var Backbone = require('backbone'),
 var BaseModel = function(attributes, options){
 	var defaults;
     var attrs = attributes || {};
-   
+
+    if(attrs instanceof Params){
+    	throw new Error("Dont Mass assign values to a model <" + this.model_name + ">");
+    }
+
     //new Model definition
     if( Object.keys(this.attributes).length > 0 ){
     	
@@ -25,6 +29,10 @@ var BaseModel = function(attributes, options){
 
     	//loop over attributes	
     	for(var attr in this.attributes){
+    		if(this.attributes.hasOwnProperty(attr)){
+    			continue;
+    		}
+
     		//each attributes gets the specifed default value or null instead
     		this.defaults[attr] = this.attributes[attr].default || null;
     		delete this.attributes[attr].default;
@@ -152,6 +160,8 @@ _.extend( BaseModel.prototype, {
 	
 	save: function(options) {
       	var attrs, success, method, attachments = this.attributes._attachments, attributes = this.attributes, start = new Date();
+
+
       	/*
 			validation with attachments is extremly slow even if they dont
 			have validation rules. We remove the attachments for validation
@@ -241,7 +251,7 @@ _.extend( BaseModel.prototype, {
 	    };
 
 	    if(method === "create"){
-	    	log = "Saving <" + hash.type + ' #' + hash._id + '>' + log; 
+	    	log = "Creating <" + hash.type + ' # >' + log; 
 	    	Yolo.db.save(hash, function(err, result){
 	    		if(err) return options.error(err);
 	    		options.success(result);
@@ -263,6 +273,14 @@ _.extend( BaseModel.prototype, {
 	    }
 
 	    Yolo.logger.info(log);
+	},
+
+	set : function(key, value){
+		if( _.isObject(key) && key instanceof Params){
+			throw new Error("Dont Mass assign values to a model <" + this.model_name + ">");
+		}
+
+		return Backbone.Model.prototype.set.call(this, key, value);
 	}
 });
 

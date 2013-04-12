@@ -2,24 +2,37 @@ var express = require('express'),
 	connect = require('connect'),
 	engine = require('ejs-locals'),
 	RedisStore = require('connect-redis')(express),
-	_ = require('underscore');
+	_ = require('underscore'),
+	Params = require('./params');
 
 var routeDefaults = {
 	via : 'get',
 	authorized : true
 };
 
-function error(status, msg) {
-  var err = new Error(msg);
-  err.status = status;
-  return err;
-}
-
 function validateConstraints(route){
 	return function validateConstraintsClosure(req, res, next){
-		if(route.authorized && !req.session.user){
-			return res.redirect(Yolo.config.http.notAuthorizedRedirect);
+		
+		//check if the route should be authorized
+		if( route.authorized ){
+			
+			if( !req.session.authorized ){
+				
+				// we redirect if its html otherwise throw error				
+				if( req.accepts('text/html') === 'text/html' ){
+					res.redirect(Yolo.config.http.notAuthorizedRedirect);
+
+				} else {
+					res.send(401, _.extend( Yolo.errors[401], {
+						info : "authorize at " + Yolo.config.http.notAuthorizedRedirect
+					}));
+				}
+
+				return;
+			}
 		} 
+
+
 		next();
 	}
 };
@@ -34,12 +47,12 @@ function callRoute(route){
 		var instance = new controller();
 
 		//merge all into one params object
-		var params = _.extend({}, req.params, req.query, req.body, { files : req.files });
+		var params = new Params();
+			params.set( _.extend({}, req.params, req.query, req.body, { files : req.files }));
 		
 		//make these in the controller available
 		instance.request = req;
 		instance.response = res;
-		instance.currentUser = null;
 
 		//if the user has a session we lookup the user in the db
 		if(req.session && req.session.user){
@@ -127,7 +140,7 @@ Http.prototype.bind = function(routes){
 
 Http.prototype.routeMismatch = function(){
 	this.server.use(function(req, res){
-  		res.send(404, { error: "Lame, can't find that", status : 404 });
+  		res.send(404, Yolo.errors[404]);
 	});
 };
 
