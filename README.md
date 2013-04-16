@@ -9,7 +9,7 @@ $ npm install yolo-server
 
 #Scaffolding 
 Scaffolding for app structure, models and controllers is available via the [yolo-cli](https://github.com/heythere-project/yolo-cli).
-
+##Start
 Your app needs a special structure in order to get yolo running for you:
 ```
 app/
@@ -24,7 +24,7 @@ config/
 ```
 Require yolo where ever you want and pass the those folders to the *run* method like so: 
 
-##Start
+
 ```js
 var Yolo = require('yolo-server'),
 	server = new Yolo();
