@@ -7,6 +7,8 @@ var flags = require('optimist').argv,
 
 function YoloApp(){};
 
+YoloApp.version = require('./package.json').version;
+
 /*
 	this method is doing all the magic 
 	follow the function calls if you want to know 
