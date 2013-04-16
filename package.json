@@ -1,6 +1,6 @@
 {
   "name": "yolo-server",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "Sebastian Otto <sebastian@heythere.de>",
   "description": "Webframework that powers Heythere",
   "repository": {
@@ -23,7 +23,8 @@
     "connect-redis": "~1.4.5",
     "cradle": "~0.6.4",
     "gaze": "~0.3.3",
-    "mime": "~1.2.9"
+    "mime": "~1.2.9",
+    "async": "*"
   },
   "engines": {
     "node": ">=0.8"

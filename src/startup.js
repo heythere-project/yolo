@@ -219,4 +219,24 @@ module.exports = {
 
 		return l;
 	},
+
+	loadInitializers : function(){
+		var path = Yolo.CONFIG + 'initializers/',
+			initializers = fs.readdirSync(path);
+
+		for(var initializer in initializers){
+			
+			if( isDotfile(initializers[initializer]) ){
+				continue;
+			}
+
+			try{
+				require(path + initializers[initializer]);
+			}
+			catch(err){
+				Yolo.logger.warn('Initializer "' + initializers[initializer] + '" failed with: ' + err);
+			}
+		}
+
+	}
 }

@@ -37,6 +37,11 @@ function validateConstraints(route){
 	}
 };
 
+function initializers(req, res, next){
+	req.data = {};
+	Yolo.initializersBefore("controllers", req, res, next);
+};
+
 function callRoute(route){
 	var fn = route.to.split('.');
 	
@@ -48,8 +53,11 @@ function callRoute(route){
 
 		//merge all into one params object
 		var params = new Params();
-			params.set( _.extend({}, req.params, req.query, req.body, { files : req.files }));
+			params.set( _.extend({}, req.params, req.query, req.body, req.files));
 		
+		_.extend( instance, req.data);
+		delete(req.data);
+
 		//make these in the controller available
 		instance.request = req;
 		instance.response = res;
@@ -122,6 +130,7 @@ Http.prototype.bind = function(routes){
 				var route = _.extend({}, routeDefaults, _route);
 				server[route.via]('/' + path + '.:format?', 
 					validateConstraints(route), 
+					initializers,
 					callRoute(route)
 				);
 			});
@@ -129,6 +138,7 @@ Http.prototype.bind = function(routes){
 			var route = _.extend({}, routeDefaults, routes[path]);
 			server[route.via]('/' + path + '.:format?',
 				validateConstraints(route), 
+				initializers,
 				callRoute(route)
 			);
 		}

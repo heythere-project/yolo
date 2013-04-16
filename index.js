@@ -2,7 +2,8 @@ var flags = require('optimist').argv,
 	Logger = require('./src/logger'),
 	startup = require('./src/startup'),
 	path = require('path'),
-	redis = require("redis");
+	redis = require("redis"),
+	methods = require('./src/methods');
 
 
 function YoloApp(){};
@@ -14,6 +15,11 @@ YoloApp.version = require('./package.json').version;
 	follow the function calls if you want to know 
 	who yolo works…
 */
+
+YoloApp.prototype.after = methods.after;
+YoloApp.prototype.before = methods.before;
+YoloApp.prototype.initializersBefore = methods.callBefore;
+
 YoloApp.prototype.run = function(options) {
 	//global Yolo
 	Yolo = this;
@@ -32,7 +38,8 @@ YoloApp.prototype.run = function(options) {
 	this.logger = new Logger(this);
 
 	this.logger.info('You only live once - Welcome');
-	this.logger.info('Booting ' + Yolo.environment + ' …')
+	this.logger.info('Booting ' + Yolo.environment + ' …');
+	this.logger.info('Version: ' + YoloApp.version);
 
 	//perform all checks
 	startup.performChecks(this);
@@ -48,7 +55,9 @@ YoloApp.prototype.run = function(options) {
 
 	//load base classes
 	this.Model = require('./src/model');
-	this.Controller = require('./src/controller')
+	this.Controller = require('./src/controller');
+
+	startup.loadInitializers();
 
 	//load models & controllers
 	this.models = startup.loadModels(this);
@@ -80,5 +89,8 @@ YoloApp.prototype.run = function(options) {
 	//ready to go
 	this.logger.info("Ready!");
 };
+
+
+
        
 module.exports = YoloApp;
