@@ -165,7 +165,7 @@ A controller consists of a group of methods which handle one type of request def
 ```js
 module.exports = Yolo.Controller.extend({
 	index : function(params){
-		this.renderHTML("dashboard/index", {user : this.currentUser });
+		this.renderHTML("dashboard/index", {user : user });
 	}
 });
 ```
@@ -188,8 +188,6 @@ authorizes/logins the request. **data** will be saved associated with the sessio
 ###this.deAuthorize(cb)
 deAuthorizes and destroys the session and deletes the associated data. **cb** gets called after the destory has finished.
 
-###this.currentUser
-If the user has a valid session eg he is logged in the **this.currentUser** will contain the current user object.
 
 ##Routes
 The routes file in the config directory contains all the individual routes to the controllers. A route consists of a **key** and a **value**.
