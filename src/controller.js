@@ -9,19 +9,47 @@ function BaseController(){}
 
 /* … and override and extend the methods with ours */
 _.extend( BaseController.prototype, {
+    html : function(template, params){
+        this.renderHTML(template, params);
+        return this;
+    },
+
+    json : function(params){
+        this.renderJSON(params);
+        return this;
+    },
+
+    status : function(code){
+        this.response.status(code);
+        return this;
+    },
+
+    is : function(type){
+        if(type.toLowerCase() === 'json' ) return this.request.is('application/json');
+        if(type.toLowerCase() === 'html' ) return this.request.is('text/html');
+
+        return false;
+    },
+
     renderHTML : function(template, params){
         var format = this.request.params.format;
-        if( format && format === 'html' || (Yolo.config.http.respondWith === 'html' && !this.response.responded) ){
-            this.response.responded = true;
-            this.response.render(template, params );
+        
+        if( ( format && format === 'html' || 
+            this.is('html') || 
+            this.request.accepts('text/html') == 'text/html' && format != 'json') && !this.responded ){
+
+            this.responded = true;
+            this.response.render(template, params || {} )
         }
     },
 
+
     renderJSON : function(params){
         var format = this.request.params.format;
-        if( format && format === 'json' || (Yolo.config.http.respondWith === 'json' && !this.response.responded)){
-            this.response.responded = true;
-            this.response.json( params );
+        
+        if( (format && format === 'json' || this.is('json')) && !this.responded ){
+            this.responded = true;
+            this.response.json( params || {} );
         }
     },
 
@@ -31,6 +59,8 @@ _.extend( BaseController.prototype, {
 
 
     error : function( code, message ){
+        Yolo.logger.info("this.error in Controller is deprecated - use this.status instead");
+
         this.response.send(code, message || {
             code : code
         });

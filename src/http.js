@@ -62,19 +62,7 @@ function callRoute(route){
 		instance.request = req;
 		instance.response = res;
 
-		//if the user has a session we lookup the user in the db
-		if(req.session && req.session.user){
-			Yolo.models.User.findById( req.session.user.id, function(user){
-				if(user){
-					instance.currentUser = user[0];
-				}
-				instance[fn[1]](params);
-			});
-			
-		} else {
-			//otherwise call directly
-			instance[fn[1]](params);
-		}
+		instance[fn[1]](params);		
 
 		req.on("end", function(){
 			//free memory

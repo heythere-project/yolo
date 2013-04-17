@@ -9,7 +9,7 @@ exports["404"] = function (test) {
 		});
 		res.on("end", function(){
 			var data = JSON.parse(chunks);
-			test.equal(data.status, 404);
+			test.equal(data.code, 404);
 			test.equal(res.statusCode, 404);
 			test.done();
 		})

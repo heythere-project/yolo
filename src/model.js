@@ -132,8 +132,12 @@ _.extend( BaseModel.prototype, {
 				url : url ,
 				content_type : attachments[name].content_type
 			}
-		} 
-		
+		} else {
+			return {
+				url : undefined,
+				content_type : undefined
+			}
+		}
 	},
 
 	//shortcut to after event
