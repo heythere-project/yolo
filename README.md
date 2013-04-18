@@ -172,9 +172,17 @@ module.exports = Yolo.Controller.extend({
 The params object passed to each method contains every parameter that might be passed to the server. In the methods you have access to the following methods:
 ###this.renderHTML(path, options = {})
 Renders and returns a Html Template at **path**. Everything into the options object will be available as variable in the template.
+###this.html(path, options {});
+Shortcut for **this.renderHTML**. This Method is chainable.
 
-###this.renderJSON(options = {})
+###this.renderJSON(data = {})
 Returns a JSON Object containing the options.
+
+###this.json(data = {})
+Shortcut for **this.renderJSON**. This Method is chainable.
+
+###this.status(code)
+Sets the HTTP Status for that request. For Exmaple **this.status(200)**. This Method is chainable.
 
 ###this.redirect(path)
 Redirects the Request to **path**
