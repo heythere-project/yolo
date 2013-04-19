@@ -199,7 +199,7 @@ exports.Model = Yolo.baseModel.extend({
 	},
 });
 
-exports.staticInit = function( Model, model_instance, model_proto ){
+exports.init = function( Model, model_instance, model_proto ){
 	var views = {
 		findById : {
 			map : "function(doc){ if(doc.type === '"+model_proto.model_name+"'){ emit(doc._id, doc);}}"

@@ -99,6 +99,5 @@ YoloApp.prototype.run = function(options) {
 };
 
 
-
-       
+      
 module.exports = YoloApp;

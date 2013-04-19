@@ -31,14 +31,19 @@ module.exports = {
 		var path = __dirname + '/model/adapters',
 			adapters = fs.readdirSync(path);
 
+		Yolo.ModelInits = {};
+
 		adapters.forEach( function(adapter){
 			if( isDotfile(adapter) ){
 				return;
 			}
 
 			var name = formatName(adapter);
-			Yolo[name + 'Model'] = require('./model/adapters/' + adapter).Model;
+			var adapterModule = require('./model/adapters/' + adapter);
+			Yolo[name + 'Model'] = adapterModule.Model;
+			Yolo.ModelInits[name] = adapterModule.init;
 		});
+
 	},
 
 	loadModels : function(Yolo){
@@ -85,7 +90,11 @@ module.exports = {
 			return Yolo.logger.warn("Model '" + name + "' must provied property 'model_name'");
 		}
 
-		return require('./model/adapters/' + model_proto._adapter).staticInit(Model, model_instance, model_proto);
+		if( model_proto._adapter in Yolo.ModelInits ){
+			return Yolo.ModelInits[model_proto._adapter](Model, model_instance, model_proto);
+		} else {
+			return Model;
+		}
 	},
 
 	loadControllers : function(Yolo){
