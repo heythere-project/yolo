@@ -1,72 +1,13 @@
-var Backbone = require('backbone'),
-	validation = require('backbone-validation'),
-	mime = require('mime'),
-	util = require('util'),
+var mime = require('mime'),
 	_ = require('underscore'),
-	Params = require('./params');
+	Params = require('./../../params'),
+	Collection = require('backbone').Collection,
+	formatName = function(str){
+		return str.charAt(0).toUpperCase() + str.slice(1).replace('.js', '');
+	};
 
-
-/*
-	Yolo.Model
-	is the Base Model all other Models should inherit from
-
-*/
-
-/* we use the Backbone Model as base */
-var BaseModel = function(attributes, options){
-	var defaults;
-    var attrs = attributes || {};
-
-    if(attrs instanceof Params){
-    	throw new Error("Dont Mass assign values to a model <" + this.model_name + ">");
-    }
-
-    //new Model definition
-    if( Object.keys(this.attributes).length > 0 ){
-    	
-    	this.defaults = {};
-    	this.validation = {};
-
-    	//loop over attributes	
-    	for(var attr in this.attributes){
-    		//each attributes gets the specifed default value or null instead
-    		this.defaults[attr] = this.attributes[attr].default || null;
-    		delete this.attributes[attr].default;
-
-    		_.each(this.attributes[attr], _.bind(function(value, key){
-    			if(key in validation.validators ){
-    				(this.validation[attr] || (this.validation[attr] = {}))[key] = value;
-    			} 
-    		}, this ));
-    	}
-
-    	this.model_attributes = this.attributes;
-    	this.attributes = {};
-    }
-
-    this.cid = _.uniqueId('c');
-    this.attributes = {};
-    if (options && options.collection) this.collection = options.collection;
-    if (options && options.parse) attrs = this.parse(attrs, options) || {};
-    if (defaults = _.result(this, 'defaults')) {
-      attrs = _.defaults({}, attrs, defaults);
-    }
-    this.set(attrs, options);
-    this.changed = {};
-    this.initialize.apply(this, arguments);
-};
-
-BaseModel.prototype = new Backbone.Model();
-BaseModel.extend = Backbone.Model.extend;
-
-
-
-/* extend it with Backbone validations https://github.com/thedersen/backbone.validation#using-server-validation */
-_.extend( BaseModel.prototype, validation.mixin );
-
-
-/* extend the methods with ours */
-_.extend( BaseModel.prototype, { 
+exports.Model = Yolo.baseModel.extend({
+	_adapter : 'Couchdb',
 
 	idAttribute : "_id",
 
@@ -140,24 +81,6 @@ _.extend( BaseModel.prototype, {
 		}
 	},
 
-	//shortcut to after event
-	after : function(what, fn, ctx){
-		if(ctx){
-			fn = _.bind(fn, ctx);
-		}
-
-		this.on( what + ':after', fn );
-	},
-
-	//shortcut to before event
-	before : function(what, fn, ctx){
-		if(ctx){
-			fn = _.bind(fn, ctx);
-		}
-
-		this.on( what + ':before', fn );
-	},
-	
 	save: function(options) {
       	var attrs, success, method, attachments = this.attributes._attachments, attributes = this.attributes, start = new Date();
 
@@ -274,15 +197,71 @@ _.extend( BaseModel.prototype, {
 
 	    Yolo.logger.info(log);
 	},
-
-	set : function(key, value){
-		if( _.isObject(key) && key instanceof Params){
-			throw new Error("Dont Mass assign values to a model <" + this.model_name + ">");
-		}
-
-		return Backbone.Model.prototype.set.call(this, key, value);
-	}
 });
 
+exports.init = function( Model, model_instance, model_proto ){
+	var views = {
+		findById : {
+			map : "function(doc){ if(doc.type === '"+model_proto.model_name+"'){ emit(doc._id, doc);}}"
+		}
+	};
 
-module.exports = BaseModel;
+	//generate views foreach attribute
+	_.each(model_instance.defaults, function(v, attribute){
+		views["findBy" + formatName(attribute) ] = {
+			map : 'function(doc){ if(doc.type === "'+model_proto.model_name+'"){ emit(doc.'+attribute+', doc);}}'
+		};
+	});
+
+	//collect view methods
+	views = _.extend({}, model_instance.views, views);
+
+	//save view methods to db
+	Yolo.db.save('_design/' + model_proto.model_name, views);
+
+	//replace the methods with functions for calling the db
+	_.each(views, function(methods, viewName){
+		//assign each view as static method to the model
+		Model[viewName] = function(options, cb, ctx){
+			//if theres no callback we do nothing
+			if (!cb || !cb.call){
+				return;
+			}
+
+			if(_.isString(options)){
+				options = {key: options};
+			}
+
+			//call the view
+			Yolo.db.view(model_proto.model_name + '/' + viewName, options || {}, function(err, result){
+				var res =  new Collection();
+				
+				if(err){
+					//handle error
+					//TODO what should we do with database errors?
+					console.log(err);
+					return cb.call(ctx || this, res);
+				}
+				//we loop over each item in db result and create a class instance with the result values
+				for(var i = 0, len = result.length, item = result[i], Model; i < len; i++, item = result[i]){
+					
+					//lockup the model							
+					if( (Model = Yolo.models[formatName(item.value.type)]) ){
+						//type is only for db storing and referncing back to the model
+						delete item.value.type;
+						//push the created model to the result
+						res.add( new Model(item.value) );
+					}
+
+				}
+				
+				cb.call(ctx || this, res );
+			});
+		};
+	});
+
+	//delete the the views object
+	delete Model.prototype.views;
+
+	return Model;
+};

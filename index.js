@@ -54,7 +54,15 @@ YoloApp.prototype.run = function(options) {
 	this.db = require('./src/db').initialize(this);
 
 	//load base classes
-	this.Model = require('./src/model');
+	this.baseModel = require('./src/model');
+
+	// load all the models that extend the BaseModel to adapt
+	// to different data stores
+	startup.loadModelDefinitions();
+
+	//backwards compatibility || Yolo.Model is allways Yolo.CouchDbModel
+	this.Model = this.CouchdbModel;
+
 	this.Controller = require('./src/controller');
 
 	startup.loadInitializers();
@@ -91,6 +99,5 @@ YoloApp.prototype.run = function(options) {
 };
 
 
-
-       
+      
 module.exports = YoloApp;

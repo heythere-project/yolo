@@ -1,7 +1,6 @@
 var fs = require('fs'),
 	_ = require('underscore'),
 	Backbone = require('backbone'),
-	Collection = require('backbone').Collection,
 	formatName = function(str){
 		return str.charAt(0).toUpperCase() + str.slice(1).replace('.js', '');
 	},
@@ -26,6 +25,25 @@ module.exports = {
 				throw new Error("No " + check);
 			}
 		}
+	},
+
+	loadModelDefinitions : function(){
+		var path = __dirname + '/model/adapters',
+			adapters = fs.readdirSync(path);
+
+		Yolo.ModelInits = {};
+
+		adapters.forEach( function(adapter){
+			if( isDotfile(adapter) ){
+				return;
+			}
+
+			var name = formatName(adapter);
+			var adapterModule = require('./model/adapters/' + adapter);
+			Yolo[name + 'Model'] = adapterModule.Model;
+			Yolo.ModelInits[name] = adapterModule.init;
+		});
+
 	},
 
 	loadModels : function(Yolo){
@@ -72,70 +90,11 @@ module.exports = {
 			return Yolo.logger.warn("Model '" + name + "' must provied property 'model_name'");
 		}
 
-		views = {
-			findById : {
-				map : "function(doc){ if(doc.type === '"+model_proto.model_name+"'){ emit(doc._id, doc);}}"
-			}
-		};
-
-		//generate views foreach attribute
-		_.each(model_instance.defaults, function(v, attribute){
-			views["findBy" + formatName(attribute) ] = {
-				map : 'function(doc){ if(doc.type === "'+model_proto.model_name+'"){ emit(doc.'+attribute+', doc);}}'
-			};
-		});
-
-		//collect view methods
-		views = _.extend({}, model_instance.views, views);
-
-		//save view methods to db
-		Yolo.db.save('_design/' + model_proto.model_name, views);
-
-		//replace the methods with functions for calling the db
-		_.each(views, function(methods, viewName){
-			//assign each view as static method to the model
-			Model[viewName] = function(options, cb, ctx){
-				//if theres no callback we do nothing
-				if (!cb || !cb.call){
-					return;
-				}
-
-				if(_.isString(options)){
-					options = {key: options};
-				}
-
-				//call the view
-				Yolo.db.view(model_proto.model_name + '/' + viewName, options || {}, function(err, result){
-					var res =  new Collection();
-					
-					if(err){
-						//handle error
-						//TODO what should we do with database errors?
-						console.log(err);
-						return cb.call(ctx || this, res);
-					}
-					//we loop over each item in db result and create a class instance with the result values
-					for(var i = 0, len = result.length, item = result[i], Model; i < len; i++, item = result[i]){
-						
-						//lockup the model							
-						if( (Model = Yolo.models[formatName(item.value.type)]) ){
-							//type is only for db storing and referncing back to the model
-							delete item.value.type;
-							//push the created model to the result
-							res.add( new Model(item.value) );
-						}
-
-					}
-					
-					cb.call(ctx || this, res );
-				});
-			};
-		});
-
-		//delete the the views object
-		delete Model.prototype.views;
-
-		return Model;
+		if( model_proto._adapter in Yolo.ModelInits ){
+			return Yolo.ModelInits[model_proto._adapter](Model, model_instance, model_proto);
+		} else {
+			return Model;
+		}
 	},
 
 	loadControllers : function(Yolo){
