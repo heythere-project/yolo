@@ -23,9 +23,7 @@ function validateConstraints(route){
 					res.redirect(Yolo.config.http.notAuthorizedRedirect);
 
 				} else {
-					res.send(401, _.extend( Yolo.errors[401], {
-						info : "authorize at " + Yolo.config.http.notAuthorizedRedirect
-					}));
+					res.send(401);
 				}
 
 				return;
@@ -138,7 +136,7 @@ Http.prototype.bind = function(routes){
 
 Http.prototype.routeMismatch = function(){
 	this.server.use(function(req, res){
-  		res.send(404, Yolo.errors[404]);
+  		res.send(404);
 	});
 };
 

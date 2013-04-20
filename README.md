@@ -188,7 +188,7 @@ Sets the HTTP Status for that request. For Exmaple **this.status(200)**. This Me
 Redirects the Request to **path**
 
 ###this.error(code [, message])
- Returns an http error with the given **code** and optional with the **message**. **Deprecated** That might be removed in the future you should use **this.status** for setting status code and respond the error message via **this.json** and **this.html**.
+ Returns an http error with the given **code** and optional with the **message**.
 
 ###this.authorize(data = {})
 authorizes/logins the request. **data** will be saved associated with the session.

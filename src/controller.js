@@ -1,4 +1,5 @@
-var _ = require('underscore');
+var _ = require('underscore'),
+    statusCodes = require('http').STATUS_CODES;
 
 /*
     Yolo.Controller
@@ -59,10 +60,9 @@ _.extend( BaseController.prototype, {
 
 
     error : function( code, message ){
-        Yolo.logger.info("this.error in Controller is deprecated - use this.status instead");
-
         this.response.send(code, message || {
-            code : code
+            code : code,
+            message : statusCodes[code]
         });
     },
 
