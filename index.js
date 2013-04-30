@@ -63,9 +63,6 @@ YoloApp.prototype.run = function(options) {
 	this.models = startup.loadModels(this);
 	this.controllers = startup.loadControllers(this);
 
-	this.errors = require('./src/errors.js');
-
-	
 	//load routes & check them
 	this.routes = startup.loadRoutes(this);
 

@@ -26,11 +26,10 @@ _.extend( BaseController.prototype, {
     },
 
     is : function(type){
-        if(type.toLowerCase() === 'json' && (this.request.is('application/json') || this.request.params.format === 'json' )){
-            return true;
-        } 
-        
-        if(type.toLowerCase() === 'html' ) return true;
+        var isJson = this.request.is('application/json') || this.request.params.format === 'json';
+
+        if(type.toLowerCase() === 'json' && isJson ) return true; 
+        if(type.toLowerCase() === 'html'  && !isJson ) return true;
 
         return false;
     },
