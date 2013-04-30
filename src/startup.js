@@ -1,7 +1,8 @@
 var fs = require('fs'),
 	_ = require('underscore'),
-	Backbone = require('backbone'),
-	Collection = require('backbone').Collection,
+	Backbone = require('Backbone'),
+	Collection = require('Backbone').Collection,
+	validation = require('Backbone-validation'),
 	formatName = function(str){
 		return str.charAt(0).toUpperCase() + str.slice(1).replace('.js', '');
 	},
@@ -42,6 +43,7 @@ module.exports = {
 			var name = formatName(model);
 			model = self.initializeModel( path, model, name);
 
+
 			/* we added only succesfully intialized models */
 			if(model){
 				l[name] = model;
@@ -61,6 +63,8 @@ module.exports = {
 			model_proto = Model.prototype,
 			views = {};
 
+			 
+
 		/* 
 			Each model have to inherit from the Yolo.Model
 		*/
@@ -71,6 +75,29 @@ module.exports = {
 		if( !('model_name' in model_instance) ){
 			return Yolo.logger.warn("Model '" + name + "' must provied property 'model_name'");
 		}
+
+		 if( Object.keys(model_proto.attributes).length > 0 ){
+	    	
+	    	model_proto.defaults = {};
+	    	model_proto.validation = {};
+
+	    	//loop over attributes	
+	    	for(var attr in model_proto.attributes){
+	    		//each attributes gets the specifed default value or null instead
+	    		model_proto.defaults[attr] = model_proto.attributes[attr].default || null;
+	    		delete model_proto.attributes[attr].default;
+
+	    		_.each(model_proto.attributes[attr], function(value, key){
+	    			if(key in validation.validators ){
+	    				(model_proto.validation[attr] || (model_proto.validation[attr] = {}))[key] = value;
+	    			} 
+	    		});
+	    	}
+
+	    	model_proto.model_attributes = model_proto.attributes;
+	    	model_proto.attributes = {};
+	    }
+
 
 		views = {
 			findById : {
@@ -106,7 +133,7 @@ module.exports = {
 
 				//call the view
 				Yolo.db.view(model_proto.model_name + '/' + viewName, options || {}, function(err, result){
-					var res =  new Collection();
+					var res = [];
 					
 					if(err){
 						//handle error
@@ -124,7 +151,7 @@ module.exports = {
 							//type is only for db storing and referncing back to the model
 							delete item.value.type;
 							//push the created model to the result
-							res.add( new Model(item.value) );
+							res.push( new Model(item.value) );
 						}
 
 					}
@@ -134,8 +161,6 @@ module.exports = {
 			};
 		});
 
-		//delete the the views object
-		delete Model.prototype.views;
 
 		return Model;
 	},
