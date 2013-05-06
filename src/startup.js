@@ -1,8 +1,8 @@
 var fs = require('fs'),
 	_ = require('underscore'),
-	Backbone = require('Backbone'),
-	Collection = require('Backbone').Collection,
-	validation = require('Backbone-validation'),
+	Backbone = require('backbone'),
+	Collection = require('backbone').Collection,
+	validation = require('backbone-validation'),
 	formatName = function(str){
 		return str.charAt(0).toUpperCase() + str.slice(1).replace('.js', '');
 	},

@@ -74,9 +74,9 @@ _.extend( BaseController.prototype, {
     },
 
     deAuthorize : function( cb ){
-        this.request.session.destroy(
-            _.bind(cb, this)
-        );
+        cb = cb || function(){};
+        
+        this.request.session.destroy( cb.bind(this) );
     }
 });
 

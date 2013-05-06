@@ -247,26 +247,27 @@ _.extend( BaseModel.prototype, {
 	    options.error = function(err) {
 	      if (error) error(model, err, options);
 	      model.trigger('error', model, err, options);
-   	      model.trigger("save:after", model, resp);
+   	      model.trigger("save:after", model, err);
 	    };
 
 	    if(method === "create"){
 	    	log = "Creating <" + hash.type + '>' + log; 
+	    	
 	    	Yolo.db.save(hash, function(err, result){
 	    		if(err) return options.error(err);
 	    		options.success(result);
 	    	});
 	    } else if (method === "update"){
 	    	log = "Updating <" + hash.type + ' #' + hash._id + '>' + log; 
-
-	    	Yolo.db.merge(model.id, model.get('rev'), hash, function(err, result){
+	    	
+	    	Yolo.db.merge(model.id, model.get('_rev'), hash, function(err, result){
 				if(err) return options.error(err);
 	    		options.success(result);
 	    	})
 	    } else if (method === "delete"){
 	    	log = "Removing <" + hash.type + ' #' + hash._id + '>' + log; 
 
-	    	Yolo.db.remove(model.id, model.get('rev'), hash, function(err, res){
+	    	Yolo.db.remove(model.id, model.get('_rev'), hash, function(err, result){
 	    		if(err) return options.error(err);
 	    		options.success(result);
 	    	})
