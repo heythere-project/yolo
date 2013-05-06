@@ -25,22 +25,31 @@ _.extend( BaseController.prototype, {
         return this;
     },
 
+    // content negotiation
     is : function(type){
-        var isJson = this.request.is('application/json') || this.request.params.format === 'json';
+        var format = this.request.params.format;
+            formatHtml = format && format === 'html',
+            formatJson = format && format === 'json',
+            headerJson = this.request.is('application/json');
 
-        if(type.toLowerCase() === 'json' && isJson ) return true; 
-        if(type.toLowerCase() === 'html'  && !isJson ) return true;
+        type = type.toLowerCase();
+
+        // has json header or is formatJson
+        if( type === 'json' ){
+            return headerJson || formatJson;
+        }
+
+        // is its formatHtml
+        if( formatHtml || ( this.request.accepts('text/html') == 'text/html' && !(headerJson || formatJson) ) ){
+            if(type === 'html') return true;
+        }
 
         return false;
     },
 
     renderHTML : function(template, params){
-        var format = this.request.params.format;
-        
-        if( ( format && format === 'html' || 
-            this.is('html') || 
-            this.request.accepts('text/html') == 'text/html' && format != 'json') && !this.responded ){
-
+        // respond with html if its html and is json will fail
+        if( this.is('html') || ( !this.is('json') && !this.responded )){
             this.responded = true;
             this.response.render(template, params || {} )
         }
@@ -48,9 +57,8 @@ _.extend( BaseController.prototype, {
 
 
     renderJSON : function(params){
-        var format = this.request.params.format;
-        
-        if( (format && format === 'json' || this.is('json')) && !this.responded ){
+
+        if( this.is('json') && !this.responded ){
             this.responded = true;
             this.response.json( params || {} );
         }
@@ -75,7 +83,7 @@ _.extend( BaseController.prototype, {
 
     deAuthorize : function( cb ){
         cb = cb || function(){};
-        
+
         this.request.session.destroy( cb.bind(this) );
     }
 });
