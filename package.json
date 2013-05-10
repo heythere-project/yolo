@@ -1,6 +1,6 @@
 {
   "name": "yolo-server",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "author": "Sebastian Otto <sebastian@heythere.de>",
   "description": "Webframework that powers Heythere",
   "repository": {

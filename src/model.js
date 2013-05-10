@@ -255,7 +255,10 @@ _.extend( BaseModel.prototype, {
 	    	
 	    	Yolo.db.save(hash, function(err, result){
 	    		if(err) return options.error(err);
-	    		options.success(result);
+	    		options.success({
+	    			_id : result.id,
+	    			_rev : result.rev
+	    		});
 	    	});
 	    } else if (method === "update"){
 	    	log = "Updating <" + hash.type + ' #' + hash._id + '>' + log; 
