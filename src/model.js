@@ -263,7 +263,7 @@ _.extend( BaseModel.prototype, {
 	    } else if (method === "update"){
 	    	log = "Updating <" + hash.type + ' #' + hash._id + '>' + log; 
 	    	
-	    	Yolo.db.merge(model.id, model.get('_rev'), hash, function(err, result){
+	    	Yolo.db.merge(model.id, /*model.get('_rev'),*/ hash, function(err, result){
 				if(err) return options.error(err);
 	    		options.success(result);
 	    	})
