@@ -10,6 +10,7 @@ var routeDefaults = {
 	authorized : true
 };
 
+
 function validateConstraints(route){
 	return function validateConstraintsClosure(req, res, next){
 		
@@ -17,15 +18,18 @@ function validateConstraints(route){
 		if( route.authorized ){
 			
 			if( !req.session.authorized ){
-				
-				// we redirect if its html otherwise throw error				
-				if( req.accepts('text/html') === 'text/html' ){
+				res.status(401);
+
+ 				var formatJson = req.params.format && req.params.format === 'json',
+            		headerJson = req.is('application/json');
+
+				// we redirect if its html 			
+				if( !(formatJson || headerJson) ){
 					res.redirect(Yolo.config.http.notAuthorizedRedirect);
-
 				} else {
-					res.send(401);
+					res.end();
 				}
-
+				
 				return;
 			}
 		} 
