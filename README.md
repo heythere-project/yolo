@@ -1,6 +1,6 @@
 [![NPM version](https://nodei.co/npm/yolo-server.png?downloads=true)](https://nodei.co/npm/yolo-server.png?downloads=true)
 #Yolo
-Yolo is MVC WebFramework written in Nodejs heavily inspired by ruby on rails. It powers our Heythere servers. 
+Yolo is MVC webframework written in Nodejs heavily inspired by ruby on rails. It powers our Heythere servers. 
 
 ##Install
 __Yolo requires nodejs, couchdb and redis to run__
