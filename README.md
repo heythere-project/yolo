@@ -1,4 +1,4 @@
-[![NPM version](https://badge.fury.io/js/yolo-server.png)](http://badge.fury.io/js/yolo-server)
+[![NPM version](https://nodei.co/npm/yolo-server.png?downloads=true)](https://nodei.co/npm/yolo-server.png?downloads=true)
 #Yolo
 Yolo is MVC WebFramework written in Nodejs heavily inspired by ruby on rails. It powers our Heythere servers. 
 
