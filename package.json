@@ -1,52 +1,52 @@
 {
-  "name": "yolo-server",
-  "version": "0.1.0",
-  "author": "Sebastian Otto <sebastian@heythere.de>",
-  "description": "Webframework that powers Heythere",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/heythere-project/yolo.git"
-  },
-  "dependencies": {
-    "underscore": "*",
-    "hiredis": "*",
-    "redis": "*",
-    "connect": "*",
-    "express": "*",
-    "optimist": "*",
-    "backbone": "*",
-    "backbone-validation": "*",
-    "ejs": "*",
-    "consolidate": "*",
-    "ejs-locals": "~1.0.2",
-    "express-partials": "*",
-    "connect-redis": "~1.4.5",
-    "cradle": "~0.6.4",
-    "gaze": "~0.3.3",
-    "mime": "~1.2.9",
-    "async": "*"
-  },
-  "engines": {
-    "node": ">=0.8"
-  },
-  "readmeFilename": "README.md",
-  "gitHead": "9b083d91a470a31c83642b43985f26a29c57b131",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "devDependencies": {
-    "yolo-cli": "*"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "web",
-    "framework",
-    "REST",
-    "MVC",
-    "couchdb"
-  ],
-  "license": "BSD"
+	"name": "yolo-server",
+	"version": "0.1.0",
+	"author": "Sebastian Otto <sebastian@heythere.de>",
+	"description": "Webframework that powers Heythere",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/heythere-project/yolo.git"
+	},
+	"dependencies": {
+		"underscore": "*",
+		"hiredis": "*",
+		"redis": "*",
+		"connect": "*",
+		"express": "*",
+		"optimist": "*",
+		"backbone": "*",
+		"backbone-validation": "0.7.1",
+		"ejs": "*",
+		"consolidate": "*",
+		"ejs-locals": "~1.0.2",
+		"express-partials": "*",
+		"connect-redis": "~1.4.5",
+		"cradle": "~0.6.4",
+		"gaze": "~0.3.3",
+		"mime": "~1.2.9",
+		"async": "*"
+	},
+	"engines": {
+		"node": ">=0.8"
+	},
+	"readmeFilename": "README.md",
+	"gitHead": "9b083d91a470a31c83642b43985f26a29c57b131",
+	"main": "index.js",
+	"directories": {
+		"test": "test"
+	},
+	"devDependencies": {
+		"yolo-cli": "*"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"web",
+		"framework",
+		"REST",
+		"MVC",
+		"couchdb"
+	],
+	"license": "BSD"
 }
