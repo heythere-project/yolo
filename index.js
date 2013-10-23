@@ -30,6 +30,7 @@ YoloApp.prototype.run = function(options) {
 	this.CONFIG = this.PATH + options.config;
 
 	this.environment = flags.e || 'development';
+	this.devMode = (this.environment == "development");
 	this.models = {};
 	this.controllers = {};
 	this.routes = {};

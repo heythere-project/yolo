@@ -180,7 +180,9 @@ _.extend( BaseModel.prototype, {
 
       	//sanitze all strings
       	_.each(this.defaults, function(value, key){
-      		if(this.validation[key] && ( ! ("sanitize" in this.model_attributes[key]) || this.model_attributes[key].sanitize === true) ){
+			if (this.validation[key] 
+				&& _.isString(this.attributes[key])
+				&& (!("sanitize" in this.model_attributes[key]) || this.model_attributes[key].sanitize === true)) {
       			this.attributes[key] = _.escape(this.attributes[key]);
       		}
       	}, this);
@@ -263,7 +265,7 @@ _.extend( BaseModel.prototype, {
 	    } else if (method === "update"){
 	    	log = "Updating <" + hash.type + ' #' + hash._id + '>' + log; 
 	    	
-	    	Yolo.db.merge(model.id, /*model.get('_rev'),*/ hash, function(err, result){
+	    	Yolo.db.merge(model.id, hash, function(err, result){
 				if(err) return options.error(err);
 	    		options.success(result);
 	    	})

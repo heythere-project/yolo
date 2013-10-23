@@ -60,6 +60,11 @@ function callRoute(route){
 		_.extend( instance, req.data);
 		delete(req.data);
 
+		if(Yolo.devMode){
+			Yolo.logger.log(fn[0] + "#" + fn[1] );
+			Yolo.logger.log(JSON.stringify(params));
+		}
+
 		//make these in the controller available
 		instance.request = req;
 		instance.response = res;
