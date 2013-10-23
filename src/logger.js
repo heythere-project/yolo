@@ -74,7 +74,9 @@ function Logger( Yolo ){
 				this.outStream = getLogFileStream(Yolo.CONFIG + 'logs/' + this.logFileStamp );
 			}
 
-			this.outStream.write(logUnstyled + '\n');
+			if( this.outStream ){
+				this.outStream.write(logUnstyled + '\n');
+			}
 		}
 
 	}, this);
@@ -110,10 +112,15 @@ Logger.prototype.error = function(a){
 };
 
 function getLogFileStream(path){
-	fs.openSync(path + '.txt', 'a');
-	return fs.createWriteStream(path + '.txt', {
-		flags : 'a'
-	})
+	try{
+		fs.openSync(path + '.txt', 'a');
+		return fs.createWriteStream(path + '.txt', {
+			flags : 'a'
+		})
+	} catch(err){
+		console.log(stylize("Yolo has no write permission to logs folder thus we cannot generate log files", "red"));
+	}
+	
 }
 
 function nowStamp(){
