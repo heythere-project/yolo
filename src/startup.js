@@ -102,6 +102,11 @@ module.exports = {
 		views = {
 			findById : {
 				map : "function(doc){ if(doc.type === '"+model_proto.model_name+"'){ emit(doc._id, doc);}}"
+			},
+
+			count : {
+				map : 'function( doc ){ if(doc.type === "' + model_proto.model_name + '"){ emit("count", 1); }}',
+				reduce : 'function (keys, values, rereduce){ return sum(values); }'
 			}
 		};
 
@@ -122,6 +127,15 @@ module.exports = {
 		_.each(views, function(methods, viewName){
 			//assign each view as static method to the model
 			Model[viewName] = function(options, cb, ctx){
+				if(_.isFunction(options)){
+					cb = options;
+					options = {};
+				}
+
+				if( viewName === "count" ){
+					options.dontMap = true;
+				}
+
 				//if theres no callback we do nothing
 				if (!cb || !cb.call){
 					return;
@@ -141,19 +155,28 @@ module.exports = {
 						console.log(err);
 						return cb.call(ctx || this, res);
 					}
-					//we loop over each item in db result and create a class instance with the result values
-					for(var i = 0, len = result.length, item = result[i], Model; i < len; i++, item = result[i]){
-						if(item.doc){
-							item.value = item.doc;
-						}
-						//lockup the model							
-						if( (Model = Yolo.models[formatName(item.value.type)]) ){
-							//type is only for db storing and referncing back to the model
-							delete item.value.type;
-							//push the created model to the result
-							res.push( new Model(item.value) );
-						}
 
+					if( options.dontMap ){
+						res = result;
+
+						// TODO shitty solution
+						if(viewName === "count"){
+							res = result[0].value;
+						}
+					} else {
+						//we loop over each item in db result and create a class instance with the result values
+						for(var i = 0, len = result.length, item = result[i], Model; i < len; i++, item = result[i]){
+							if(item.doc){
+								item.value = item.doc;
+							}
+							//lockup the model							
+							if( (Model = Yolo.models[formatName(item.value.type)]) ){
+								//type is only for db storing and referncing back to the model
+								delete item.value.type;
+								//push the created model to the result
+								res.push( new Model(item.value) );
+							}
+						}
 					}
 					
 					cb.call(ctx || this, res );
