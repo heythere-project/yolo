@@ -1,6 +1,5 @@
 var Backbone = require('backbone'),
 	validation = require('backbone-validation'),
-	mime = require('mime'),
 	util = require('util'),
 	_ = require('underscore'),
 	Params = require('./params');
@@ -125,7 +124,7 @@ _.extend( BaseModel.prototype, {
 
 			//if enabled we determine the file extension form the content type
 			if( Yolo.config.model.attachments.includeExtension ){
-				url += '.' + mime.extension(attachments[name].content_type);
+				url += '.' + attachments[name].content_type;
 			}
 
 			return {
@@ -179,13 +178,13 @@ _.extend( BaseModel.prototype, {
 
 
       	//sanitze all strings
-      	_.each(this.defaults, function(value, key){
+      	/* _.each(this.defaults, function(value, key){
 			if (this.validation[key] 
 				&& _.isString(this.attributes[key])
 				&& (!("sanitize" in this.model_attributes[key]) || this.model_attributes[key].sanitize === true)) {
       			this.attributes[key] = _.escape(this.attributes[key]);
       		}
-      	}, this);
+      	}, this); */
 
       	//append the models again
       	this.attributes._attachments = attachments;
@@ -196,7 +195,7 @@ _.extend( BaseModel.prototype, {
 		  		return false;
 			}
 			if (success) success(model, resp, options);
-			Yolo.logger.info('Model.save took ' + (new Date() - start) + 'ms')
+			Yolo.logger.log('Model.save took ' + (new Date() - start) + 'ms')
 		};
 
       // Finish configuring and sending the Ajax request.
@@ -278,7 +277,7 @@ _.extend( BaseModel.prototype, {
 	    	})
 	    }
 
-	    Yolo.logger.info(log);
+	    Yolo.logger.log(log);
 	},
 
 	set : function(key, value){
