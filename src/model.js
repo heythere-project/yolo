@@ -126,6 +126,8 @@ _.extend( BaseModel.prototype, {
 			if( Yolo.config.model.attachments.includeExtension ){
 				url += '.' + attachments[name].content_type;
 			}
+			
+			url += '?v=' + attachments[name].digest.slice(4, -2);
 
 			return {
 				url : url ,
