@@ -1,6 +1,6 @@
 {
   "name": "yolo-server",
-  "version": "0.1.6",
+  "version": "0.0.2",
   "author": "Sebastian Otto <sebastian@heythere.de>",
   "description": "Webframework that powers Heythere",
   "repository": {
@@ -11,8 +11,8 @@
     "underscore": "*",
     "hiredis": "*",
     "redis": "*",
-    "connect": "*",
-    "express": "*",
+    "connect": "2.9.2",
+    "express": "3.4.8",
     "optimist": "*",
     "backbone": "*",
     "backbone-validation": "0.7.1",
@@ -48,5 +48,6 @@
   "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/heythere-project/yolo/issues"
-  }
+  },
+  "homepage": "https://github.com/heythere-project/yolo"
 }

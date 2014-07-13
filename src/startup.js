@@ -30,23 +30,17 @@ module.exports = {
 	},
 
 	loadModels : function(Yolo){
-		var path = Yolo.APP + 'models/',
-			models = fs.readdirSync(path),
+		var path = Yolo.APP + 'models',
+			models = this.getAllFiles(path),
 			self = this,
 			l = {};
 
 		models.forEach(function(model){
-			if (isDotfile(model)){
-				return;
-			}
-
-			var name = formatName(model);
-			model = self.initializeModel( path, model, name);
-
+			var Model = self.initializeModel( model.path, model.name);
 
 			/* we added only succesfully intialized models */
-			if(model){
-				l[name] = model;
+			if( Model ){
+				l[model.name] = Model;
 			}
 		});
 
@@ -57,13 +51,11 @@ module.exports = {
 		this active record like stuff should move into a more
 		model related file	
 	*/
-	initializeModel : function( path, model, name){
-		var	Model = require(path + model),
+	initializeModel : function( path, name){
+		var	Model = require(path),
 			model_instance = new Model(),
 			model_proto = Model.prototype,
 			views = {};
-
-			 
 
 		/* 
 			Each model have to inherit from the Yolo.Model
@@ -189,31 +181,24 @@ module.exports = {
 	},
 
 	loadControllers : function(Yolo){
-		var path = Yolo.APP + 'controllers/',
-			controllers = fs.readdirSync(path),
-			self = this,
+		var path = Yolo.APP + 'controllers',
+			controllers = this.getAllFiles(path),
 			l = {};
 
-		controllers.forEach(function(controller){
-			if (isDotfile(controller)){
-				return;
-			}
+		controllers.forEach(function( controller ){
+			var Controller = this.initializeController( controller.path );
 
-			var name = formatName(controller);
-			controller = self.initializeController( path , controller);
-			
 			/* we added only succesfully intialized controllers */
 			if(controller){
-				l[name] = controller;
+				l[controller.name] = Controller;
 			}
-			 
-		});
+		}, this);
 
 		return l;
 	},
 
-	initializeController : function( path, controller){
-		var Controller = require(path + controller),
+	initializeController : function( path ){
+		var Controller = require(path),
 			controller_instance = new Controller();
 
 		/* 
@@ -288,5 +273,32 @@ module.exports = {
 			}
 		}
 
+	},
+
+	
+	getAllFiles : function( rootDir ){
+
+		return (function travel( dir, dirs, traveld ){
+			var files = fs.readdirSync(dir);
+
+		    files.forEach(function(file){
+		        if (file[0] != '.'){
+		        	var filePath = [dir, file].join('/'),
+		            	stat = fs.statSync(filePath);
+
+		            if( stat.isDirectory() ){
+		            	var copy = traveld.slice();
+
+		            	copy.push(file);
+		            	travel(filePath, dirs, copy);
+		            } else {
+		            	var p = traveld.join('/');
+		            	dirs.push({ path : filePath, name: (p ? p + '/' : '' ) + formatName(file) });
+		            }
+		        }
+		    });
+
+		    return dirs;
+		})(rootDir, [], []);
 	}
 }
